@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maryland Health Access Priority Dashboard</title>
+  <style>
+    :root {
+      --ink: #1d2528;
+      --muted: #5c676b;
+      --line: #d9e1df;
+      --paper: #f8faf8;
+      --surface: #ffffff;
+      --green: #5f7f4f;
+      --teal: #287c85;
+      --gold: #d58a2a;
+      --coral: #c84a3f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      letter-spacing: 0;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      padding: 30px 0 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      line-height: 1.1;
+      font-weight: 760;
+    }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.08rem;
+      line-height: 1.25;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    a { color: var(--teal); font-weight: 650; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .source-note {
+      max-width: 430px;
+      text-align: right;
+      font-size: 0.92rem;
+    }
+    main { padding: 24px 0 44px; }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .kpi {
+      min-height: 132px;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 720;
+      text-transform: uppercase;
+    }
+    .kpi strong {
+      display: block;
+      margin: 10px 0 8px;
+      font-size: 1.35rem;
+      line-height: 1.12;
+    }
+    .kpi p { font-size: 0.86rem; }
+    .grid-two {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    section {
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .chart {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: hidden;
+    }
+    .axis { stroke: #80908e; stroke-width: 1.2; }
+    .grid { stroke: #e7ecea; stroke-width: 1; }
+    .chart-label, .chart-value, .tick, .axis-label, .point-label {
+      fill: var(--ink);
+      font-size: 13px;
+    }
+    .chart-label { font-weight: 650; }
+    .chart-value { font-weight: 720; }
+    .tick, .axis-label { fill: var(--muted); }
+    .point-label { font-size: 12px; font-weight: 720; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+      background: #ffffff;
+    }
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 0.9rem;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    thead th {
+      background: #eef4f1;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      color: #3f4d50;
+    }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .strong { font-weight: 760; }
+    .muted { color: var(--muted); }
+    .heat {
+      color: #ffffff;
+      background: var(--heat);
+      font-weight: 760;
+    }
+    .method {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .formula {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+      font-variant-numeric: tabular-nums;
+      font-weight: 720;
+    }
+    .small {
+      margin-top: 10px;
+      font-size: 0.86rem;
+    }
+    footer {
+      padding: 22px 0 34px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+    @media (max-width: 980px) {
+      .topbar, .method { grid-template-columns: 1fr; display: grid; }
+      .topbar { gap: 12px; }
+      .source-note { text-align: left; max-width: none; }
+      .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid-two { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 22px, 1180px); }
+      h1 { font-size: 1.55rem; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      section { padding: 14px; }
+      .kpi { min-height: 122px; padding: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div>
+        <h1>Maryland Health Access Priority Dashboard</h1>
+        <p>County-level prioritization model for outreach planning using health burden, social need, provider-shortage designations, and hospital availability.</p>
+      </div>
+      <p class="source-note">Built from official public feeds: <a href="https://data.cdc.gov/resource/i46a-9kgh">CDC PLACES 2025</a> <a href="https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_PC.csv">HRSA HPSA Primary Care</a> <a href="https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_MH.csv">HRSA HPSA Mental Health</a> <a href="https://data.cms.gov/provider-data/dataset/xubh-q36u">CMS Hospital General Information</a>. <a href="md_county_health_access_scores.csv">Download processed CSV</a>.</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="kpis">
+      <article class='kpi'><span>Counties analyzed</span><strong>24</strong><p>Maryland counties and Baltimore City</p></article>
+<article class='kpi'><span>Highest priority</span><strong>Somerset County</strong><p>Score 78.4</p></article>
+<article class='kpi'><span>Active HPSAs</span><strong>104</strong><p>Primary-care and mental-health designations</p></article>
+<article class='kpi'><span>Hospitals</span><strong>56</strong><p>CMS Hospital General Information</p></article>
+<article class='kpi'><span>Avg. uninsured</span><strong>8.3%</strong><p>CDC PLACES adult access measure</p></article>
+<article class='kpi'><span>Fetched</span><strong>2026-06-04</strong><p>Live public data pull</p></article>
+    </div>
+
+    <div class="grid-two">
+      <section>
+        <h2>Priority Ranking</h2>
+        <svg class="chart" viewBox="0 0 920 390" role="img" aria-label="Top counties by priority score">
+<line x1="190" y1="24" x2="190" y2="356" class="axis"/>
+<text x="12" y="55" class="chart-label">Somerset County</text>
+<rect x="190" y="36" width="610.0" height="21" rx="4" fill="#c84a3f"/>
+<text x="810.0" y="52" class="chart-value">78.4</text>
+<text x="12" y="86" class="chart-label">Caroline County</text>
+<rect x="190" y="67" width="594.7" height="21" rx="4" fill="#c84a3f"/>
+<text x="794.7" y="83" class="chart-value">76.4</text>
+<text x="12" y="117" class="chart-label">Baltimore City</text>
+<rect x="190" y="98" width="594.4" height="21" rx="4" fill="#c84a3f"/>
+<text x="794.4" y="114" class="chart-value">76.4</text>
+<text x="12" y="148" class="chart-label">Dorchester County</text>
+<rect x="190" y="129" width="534.6" height="21" rx="4" fill="#d58a2a"/>
+<text x="734.6" y="145" class="chart-value">68.7</text>
+<text x="12" y="179" class="chart-label">Prince George&#x27;s County</text>
+<rect x="190" y="160" width="494.9" height="21" rx="4" fill="#d58a2a"/>
+<text x="694.9" y="176" class="chart-value">63.6</text>
+<text x="12" y="210" class="chart-label">Allegany County</text>
+<rect x="190" y="191" width="469.4" height="21" rx="4" fill="#d58a2a"/>
+<text x="669.4" y="207" class="chart-value">60.3</text>
+<text x="12" y="241" class="chart-label">Washington County</text>
+<rect x="190" y="222" width="443.6" height="21" rx="4" fill="#287c85"/>
+<text x="643.6" y="238" class="chart-value">57.0</text>
+<text x="12" y="272" class="chart-label">Wicomico County</text>
+<rect x="190" y="253" width="409.2" height="21" rx="4" fill="#287c85"/>
+<text x="609.2" y="269" class="chart-value">52.6</text>
+<text x="12" y="303" class="chart-label">Garrett County</text>
+<rect x="190" y="284" width="396.8" height="21" rx="4" fill="#287c85"/>
+<text x="596.8" y="300" class="chart-value">51.0</text>
+<text x="12" y="334" class="chart-label">Charles County</text>
+<rect x="190" y="315" width="387.8" height="21" rx="4" fill="#287c85"/>
+<text x="587.8" y="331" class="chart-value">49.8</text>
+</svg>
+      </section>
+      <section>
+        <h2>Health Burden vs. Access Gap</h2>
+        <svg class="chart" viewBox="0 0 920 430" role="img" aria-label="Health burden by access gap scatter plot">
+<line x1="76.0" y1="34" x2="76.0" y2="366" class="grid"/>
+<line x1="76" y1="366.0" x2="886" y2="366.0" class="grid"/>
+<text x="76.0" y="396" class="tick" text-anchor="middle">0</text>
+<text x="50" y="370.0" class="tick" text-anchor="end">0</text>
+<line x1="278.5" y1="34" x2="278.5" y2="366" class="grid"/>
+<line x1="76" y1="283.0" x2="886" y2="283.0" class="grid"/>
+<text x="278.5" y="396" class="tick" text-anchor="middle">25</text>
+<text x="50" y="287.0" class="tick" text-anchor="end">25</text>
+<line x1="481.0" y1="34" x2="481.0" y2="366" class="grid"/>
+<line x1="76" y1="200.0" x2="886" y2="200.0" class="grid"/>
+<text x="481.0" y="396" class="tick" text-anchor="middle">50</text>
+<text x="50" y="204.0" class="tick" text-anchor="end">50</text>
+<line x1="683.5" y1="34" x2="683.5" y2="366" class="grid"/>
+<line x1="76" y1="117.0" x2="886" y2="117.0" class="grid"/>
+<text x="683.5" y="396" class="tick" text-anchor="middle">75</text>
+<text x="50" y="121.0" class="tick" text-anchor="end">75</text>
+<line x1="886.0" y1="34" x2="886.0" y2="366" class="grid"/>
+<line x1="76" y1="34.0" x2="886" y2="34.0" class="grid"/>
+<text x="886.0" y="396" class="tick" text-anchor="middle">100</text>
+<text x="50" y="38.0" class="tick" text-anchor="end">100</text>
+<line x1="76" y1="366" x2="886" y2="366" class="axis"/>
+<line x1="76" y1="34" x2="76" y2="366" class="axis"/>
+<text x="481.0" y="420" class="axis-label" text-anchor="middle">Access gap score</text>
+<text transform="translate(17 215) rotate(-90)" class="axis-label" text-anchor="middle">Health burden score</text>
+<circle cx="678.3" cy="114.3" r="7.3" fill="#c84a3f" opacity="0.78"><title>Somerset County: priority 78.4</title></circle>
+<circle cx="815.2" cy="92.9" r="7.7" fill="#c84a3f" opacity="0.78"><title>Caroline County: priority 76.4</title></circle>
+<circle cx="529.0" cy="118.2" r="16.0" fill="#c84a3f" opacity="0.78"><title>Baltimore City: priority 76.4</title></circle>
+<circle cx="495.0" cy="78.5" r="7.6" fill="#d58a2a" opacity="0.78"><title>Dorchester County: priority 68.7</title></circle>
+<circle cx="525.3" cy="188.8" r="19.2" fill="#d58a2a" opacity="0.78"><title>Prince George&#x27;s County: priority 63.6</title></circle>
+<circle cx="491.6" cy="110.9" r="8.8" fill="#d58a2a" opacity="0.78"><title>Allegany County: priority 60.3</title></circle>
+<circle cx="565.8" cy="146.0" r="10.8" fill="#287c85" opacity="0.78"><title>Washington County: priority 57.0</title></circle>
+<circle cx="498.5" cy="170.9" r="9.7" fill="#287c85" opacity="0.78"><title>Wicomico County: priority 52.6</title></circle>
+<circle cx="627.5" cy="139.4" r="7.5" fill="#287c85" opacity="0.78"><title>Garrett County: priority 51.0</title></circle>
+<circle cx="462.6" cy="178.1" r="11.0" fill="#287c85" opacity="0.78"><title>Charles County: priority 49.8</title></circle>
+<circle cx="455.0" cy="134.4" r="9.7" fill="#287c85" opacity="0.78"><title>Cecil County: priority 48.8</title></circle>
+<circle cx="429.3" cy="162.0" r="7.0" fill="#5f7f4f" opacity="0.78"><title>Kent County: priority 42.6</title></circle>
+<circle cx="414.7" cy="214.3" r="18.4" fill="#5f7f4f" opacity="0.78"><title>Baltimore County: priority 42.0</title></circle>
+<circle cx="474.5" cy="182.6" r="8.4" fill="#5f7f4f" opacity="0.78"><title>Worcester County: priority 38.8</title></circle>
+<circle cx="399.3" cy="220.6" r="10.0" fill="#5f7f4f" opacity="0.78"><title>St. Mary&#x27;s County: priority 35.2</title></circle>
+<circle cx="488.3" cy="222.9" r="12.5" fill="#5f7f4f" opacity="0.78"><title>Harford County: priority 34.5</title></circle>
+<circle cx="523.1" cy="230.4" r="8.3" fill="#5f7f4f" opacity="0.78"><title>Queen Anne&#x27;s County: priority 32.7</title></circle>
+<circle cx="501.7" cy="266.1" r="12.9" fill="#5f7f4f" opacity="0.78"><title>Frederick County: priority 30.2</title></circle>
+<circle cx="409.3" cy="262.9" r="16.2" fill="#5f7f4f" opacity="0.78"><title>Anne Arundel County: priority 28.0</title></circle>
+<circle cx="209.3" cy="209.7" r="7.8" fill="#5f7f4f" opacity="0.78"><title>Talbot County: priority 27.9</title></circle>
+<circle cx="348.1" cy="237.8" r="9.5" fill="#5f7f4f" opacity="0.78"><title>Calvert County: priority 27.5</title></circle>
+<circle cx="444.7" cy="240.1" r="11.1" fill="#5f7f4f" opacity="0.78"><title>Carroll County: priority 27.2</title></circle>
+<circle cx="516.0" cy="342.3" r="20.0" fill="#5f7f4f" opacity="0.78"><title>Montgomery County: priority 23.1</title></circle>
+<circle cx="336.7" cy="325.1" r="13.5" fill="#5f7f4f" opacity="0.78"><title>Howard County: priority 13.4</title></circle>
+<text x="690.3" y="104.3" class="point-label">Somerset</text>
+<text x="827.2" y="82.9" class="point-label">Caroline</text>
+<text x="541.0" y="108.2" class="point-label">Baltimore City</text>
+<text x="507.0" y="68.5" class="point-label">Dorchester</text>
+<text x="537.3" y="178.8" class="point-label">Prince George&#x27;s</text>
+</svg>
+      </section>
+    </div>
+
+    <section>
+      <h2>Top Counties by Outreach Priority</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>County</th>
+              <th class="num">Priority</th>
+              <th class="num">Health</th>
+              <th class="num">Social</th>
+              <th class="num">Access</th>
+              <th class="num">Uninsured</th>
+              <th class="num">Food insecure</th>
+              <th class="num">PC HPSA</th>
+              <th class="num">MH HPSA</th>
+              <th class="num">Hospitals / 100k</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><th>Somerset County</th><td class='num strong'>78.4</td><td class='num'>75.8</td><td class='num'>84.2</td><td class='num'>74.4</td><td class='num'>10.9%</td><td class='num'>23.4%</td><td class='num'>1</td><td class='num'>1</td><td class='num'>0.00</td></tr>
+<tr><td>2</td><th>Caroline County</th><td class='num strong'>76.4</td><td class='num'>82.3</td><td class='num'>59.1</td><td class='num'>91.3</td><td class='num'>10.6%</td><td class='num'>19.2%</td><td class='num'>2</td><td class='num'>2</td><td class='num'>0.00</td></tr>
+<tr><td>3</td><th>Baltimore City</th><td class='num strong'>76.4</td><td class='num'>74.6</td><td class='num'>92.9</td><td class='num'>55.9</td><td class='num'>10.1%</td><td class='num'>25.2%</td><td class='num'>19</td><td class='num'>10</td><td class='num'>2.48</td></tr>
+<tr><td>4</td><th>Dorchester County</th><td class='num strong'>68.7</td><td class='num'>86.6</td><td class='num'>60.3</td><td class='num'>51.7</td><td class='num'>10.1%</td><td class='num'>19.3%</td><td class='num'>1</td><td class='num'>1</td><td class='num'>3.04</td></tr>
+<tr><td>5</td><th>Prince George&#x27;s County</th><td class='num strong'>63.6</td><td class='num'>53.4</td><td class='num'>81.0</td><td class='num'>55.5</td><td class='num'>12.5%</td><td class='num'>22.1%</td><td class='num'>4</td><td class='num'>3</td><td class='num'>0.42</td></tr>
+<tr><td>6</td><th>Allegany County</th><td class='num strong'>60.3</td><td class='num'>76.8</td><td class='num'>47.8</td><td class='num'>51.3</td><td class='num'>9.4%</td><td class='num'>18.0%</td><td class='num'>2</td><td class='num'>3</td><td class='num'>2.97</td></tr>
+<tr><td>7</td><th>Washington County</th><td class='num strong'>57.0</td><td class='num'>66.3</td><td class='num'>43.9</td><td class='num'>60.5</td><td class='num'>9.4%</td><td class='num'>15.9%</td><td class='num'>3</td><td class='num'>5</td><td class='num'>1.28</td></tr>
+<tr><td>8</td><th>Wicomico County</th><td class='num strong'>52.6</td><td class='num'>58.8</td><td class='num'>45.8</td><td class='num'>52.2</td><td class='num'>9.1%</td><td class='num'>16.7%</td><td class='num'>2</td><td class='num'>2</td><td class='num'>0.95</td></tr>
+<tr><td>9</td><th>Garrett County</th><td class='num strong'>51.0</td><td class='num'>68.3</td><td class='num'>19.0</td><td class='num'>68.1</td><td class='num'>7.9%</td><td class='num'>12.3%</td><td class='num'>2</td><td class='num'>2</td><td class='num'>3.52</td></tr>
+<tr><td>10</td><th>Charles County</th><td class='num strong'>49.8</td><td class='num'>56.6</td><td class='num'>43.6</td><td class='num'>47.7</td><td class='num'>7.5%</td><td class='num'>16.4%</td><td class='num'>1</td><td class='num'>1</td><td class='num'>0.58</td></tr>
+<tr><td>11</td><th>Cecil County</th><td class='num strong'>48.8</td><td class='num'>69.7</td><td class='num'>26.2</td><td class='num'>46.8</td><td class='num'>8.0%</td><td class='num'>13.3%</td><td class='num'>2</td><td class='num'>2</td><td class='num'>1.89</td></tr>
+<tr><td>12</td><th>Kent County</th><td class='num strong'>42.6</td><td class='num'>61.4</td><td class='num'>20.4</td><td class='num'>43.6</td><td class='num'>7.9%</td><td class='num'>12.4%</td><td class='num'>1</td><td class='num'>1</td><td class='num'>5.18</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="method">
+      <section>
+        <h2>Component Heatmap</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>County</th>
+                <th class="num">Health burden</th>
+                <th class="num">Social need</th>
+                <th class="num">Access gap</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th>Somerset County</th><td class="heat num" style="--heat:#c84a3f">75.8</td><td class="heat num" style="--heat:#c84a3f">84.2</td><td class="heat num" style="--heat:#d58a2a">74.4</td></tr>
+<tr><th>Caroline County</th><td class="heat num" style="--heat:#c84a3f">82.3</td><td class="heat num" style="--heat:#287c85">59.1</td><td class="heat num" style="--heat:#c84a3f">91.3</td></tr>
+<tr><th>Baltimore City</th><td class="heat num" style="--heat:#d58a2a">74.6</td><td class="heat num" style="--heat:#c84a3f">92.9</td><td class="heat num" style="--heat:#287c85">55.9</td></tr>
+<tr><th>Dorchester County</th><td class="heat num" style="--heat:#c84a3f">86.6</td><td class="heat num" style="--heat:#d58a2a">60.3</td><td class="heat num" style="--heat:#287c85">51.7</td></tr>
+<tr><th>Prince George&#x27;s County</th><td class="heat num" style="--heat:#287c85">53.4</td><td class="heat num" style="--heat:#c84a3f">81.0</td><td class="heat num" style="--heat:#287c85">55.5</td></tr>
+<tr><th>Allegany County</th><td class="heat num" style="--heat:#c84a3f">76.8</td><td class="heat num" style="--heat:#287c85">47.8</td><td class="heat num" style="--heat:#287c85">51.3</td></tr>
+<tr><th>Washington County</th><td class="heat num" style="--heat:#d58a2a">66.3</td><td class="heat num" style="--heat:#5f7f4f">43.9</td><td class="heat num" style="--heat:#d58a2a">60.5</td></tr>
+<tr><th>Wicomico County</th><td class="heat num" style="--heat:#287c85">58.8</td><td class="heat num" style="--heat:#287c85">45.8</td><td class="heat num" style="--heat:#287c85">52.2</td></tr>
+<tr><th>Garrett County</th><td class="heat num" style="--heat:#d58a2a">68.3</td><td class="heat num" style="--heat:#5f7f4f">19.0</td><td class="heat num" style="--heat:#d58a2a">68.1</td></tr>
+<tr><th>Charles County</th><td class="heat num" style="--heat:#287c85">56.6</td><td class="heat num" style="--heat:#5f7f4f">43.6</td><td class="heat num" style="--heat:#287c85">47.7</td></tr>
+<tr><th>Cecil County</th><td class="heat num" style="--heat:#d58a2a">69.7</td><td class="heat num" style="--heat:#5f7f4f">26.2</td><td class="heat num" style="--heat:#287c85">46.8</td></tr>
+<tr><th>Kent County</th><td class="heat num" style="--heat:#d58a2a">61.4</td><td class="heat num" style="--heat:#5f7f4f">20.4</td><td class="heat num" style="--heat:#5f7f4f">43.6</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h2>Scoring Model</h2>
+        <div class="formula">Priority = 40% health burden + 35% social need + 25% access gap</div>
+        <p class="small">Each metric is min-max normalized across Maryland counties so 100 is the highest observed need in the state. Health burden includes diabetes, obesity, high blood pressure, physical distress, mental distress, and depression. Social need includes uninsured adults, food insecurity, housing insecurity, transportation barriers, and utility insecurity. Access gap combines active primary-care and mental-health HPSA designations, HPSA score severity, hospital count per 100,000 residents, and CMS star-rating gaps where available.</p>
+        <p class="small">This is a planning and analytics artifact, not medical advice or a clinical triage tool.</p>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      <p>Generated on 2026-06-04 by <code>src/build_dashboard.py</code>. The processed dataset is committed for review, and the pipeline can be rerun against the official sources.</p>
+    </div>
+  </footer>
+</body>
+</html>
