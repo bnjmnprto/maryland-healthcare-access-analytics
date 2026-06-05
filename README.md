@@ -4,6 +4,8 @@ This portfolio project ranks Maryland counties for community-health outreach usi
 
 Live dashboard: https://bnjmnprto.github.io/community-health-access-analytics/
 
+![Maryland Health Access Priority Dashboard preview](docs/assets/dashboard-preview.png)
+
 ## Business Question
 
 Where should a health system, nonprofit, or public health team prioritize outreach when balancing chronic-disease burden, social barriers, provider shortages, and local hospital access?
