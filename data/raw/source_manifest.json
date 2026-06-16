@@ -1,0 +1,52 @@
+{
+  "project": "Maryland Healthcare Access Analytics",
+  "default_mode": "sample_fallback",
+  "sample_file": "data/raw/maryland_county_health_access_sample.csv",
+  "optional_live_file": "data/raw/maryland_county_health_access_public.csv",
+  "county_geometry": {
+    "file": "data/raw/maryland_counties.geojson",
+    "source": "Maryland Open Data County Boundaries",
+    "url": "https://opendata.maryland.gov/resource/y8c4-8fr3.geojson?$limit=5000"
+  },
+  "public_sources": [
+    {
+      "name": "CDC PLACES county data",
+      "url": "https://data.cdc.gov/resource/i46a-9kgh",
+      "used_for": [
+        "population",
+        "uninsured rate",
+        "diabetes prevalence",
+        "obesity prevalence",
+        "hypertension prevalence",
+        "poor or fair health proxy when available"
+      ]
+    },
+    {
+      "name": "HRSA Primary Care HPSA download",
+      "url": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_PC.csv",
+      "used_for": [
+        "primary care shortage score"
+      ]
+    },
+    {
+      "name": "HRSA Mental Health HPSA download",
+      "url": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_MH.csv",
+      "used_for": [
+        "mental health shortage score"
+      ]
+    },
+    {
+      "name": "CMS Hospital General Information",
+      "url": "https://data.cms.gov/provider-data/dataset/xubh-q36u",
+      "used_for": [
+        "hospital count",
+        "average hospital star rating"
+      ]
+    }
+  ],
+  "important_limitations": [
+    "The default committed dataset is a demonstration sample so the project runs without network access.",
+    "The optional live ingestion command fills only fields available from the public feeds and retains documented sample fallback values for missing feature groups.",
+    "The project uses aggregate county-level data only and is not a clinical decision tool."
+  ]
+}

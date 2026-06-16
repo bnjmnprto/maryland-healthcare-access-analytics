@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a Maryland county health-access prioritization dashboard.
+"""Build a Maryland county healthcare access analytics dashboard.
 
 The project intentionally uses only the Python standard library so reviewers can
 run it without dependency setup. It pulls public data from official CDC, HRSA,
@@ -98,7 +98,7 @@ CSV_FIELDS = [
 def fetch_text(url: str) -> str:
     request = urllib.request.Request(
         url,
-        headers={"User-Agent": "community-health-access-analytics/1.0"},
+        headers={"User-Agent": "maryland-healthcare-access-analytics/1.0"},
     )
     try:
         with urllib.request.urlopen(request, timeout=90) as response:
@@ -532,7 +532,7 @@ def render_html(rows: list[dict[str, object]], fetched_on: str) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maryland Health Access Priority Dashboard</title>
+  <title>Maryland Healthcare Access Analytics</title>
   <style>
     :root {{
       --ink: #1d2528;
@@ -724,7 +724,7 @@ def render_html(rows: list[dict[str, object]], fetched_on: str) -> str:
   <header>
     <div class="wrap topbar">
       <div>
-        <h1>Maryland Health Access Priority Dashboard</h1>
+        <h1>Maryland Healthcare Access Analytics</h1>
         <p>County-level prioritization model for outreach planning using health burden, social need, provider-shortage designations, and hospital availability.</p>
       </div>
       <p class="source-note">Built from official public feeds: {source_links}. <a href="md_county_health_access_scores.csv">Download processed CSV</a>.</p>

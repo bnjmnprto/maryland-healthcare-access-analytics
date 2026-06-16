@@ -1,0 +1,15 @@
+feature,importance,direction,coefficient
+poverty_pct,0.6021600026148705,increases risk,0.6021600026148705
+hpsa_mental_health_score,0.48574941415862366,increases risk,0.48574941415862366
+preventable_hospital_stays_per_100k,0.48189197773403275,increases risk,0.48189197773403275
+hpsa_primary_care_score,0.4602418442945457,increases risk,0.4602418442945457
+uninsured_pct,0.42205066310048456,increases risk,0.42205066310048456
+diabetes_pct,0.3899045183228217,increases risk,0.3899045183228217
+readmission_rate_pct,0.3593939357106875,increases risk,0.3593939357106875
+obesity_pct,0.34606857547467434,increases risk,0.34606857547467434
+hypertension_pct,0.3253035026128176,increases risk,0.3253035026128176
+avg_hospital_star_rating,0.16026120771103838,decreases risk,-0.16026120771103838
+dental_providers_per_100k,0.14912551525870696,decreases risk,-0.14912551525870696
+pct_age_65_plus,0.0999036771630727,decreases risk,-0.0999036771630727
+mental_health_providers_per_100k,0.08670644109690964,decreases risk,-0.08670644109690964
+primary_care_physicians_per_100k,0.07378455802025982,decreases risk,-0.07378455802025982
