@@ -6,7 +6,7 @@ A public-health analytics project using Python, SQL, SQLite, scikit-learn, Strea
 
 **Tech stack:** Python, pandas, SQLite, SQL, scikit-learn, Streamlit, Plotly, pytest, GitHub Actions
 
-**Live dashboard:** Coming soon  
+**Live dashboard:** https://maryland-healthcare-access-analytics.streamlit.app  
 This link should be updated after Streamlit Community Cloud deployment.
 
 **Run locally:** `streamlit run dashboard/app.py`
