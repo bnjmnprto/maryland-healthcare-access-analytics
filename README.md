@@ -1,6 +1,6 @@
 # Maryland Healthcare Access Analytics
 
-[![Project Checks](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml/badge.svg?branch=main)](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml)
+[![Project Checks](https://github.com/bnjmnprto/maryland-healthcare-access-analytics/actions/workflows/project_checks.yml/badge.svg?branch=main)](https://github.com/bnjmnprto/maryland-healthcare-access-analytics/actions/workflows/project_checks.yml)
 
 A public-health analytics project using Python, SQL, SQLite, scikit-learn, Streamlit, and public county-level datasets to identify Maryland jurisdictions at elevated healthcare access risk.
 
@@ -249,9 +249,9 @@ make test
 make all
 ```
 
-## Repository Rename Note
+## Repository
 
-The current GitHub remote is still `bnjmnprto/community-health-access-analytics`. After this branch is reviewed and approved, rename the GitHub repository to `maryland-healthcare-access-analytics` and update badges, deployment links, and portfolio URLs. Do not rename the remote before review.
+GitHub repository: `bnjmnprto/maryland-healthcare-access-analytics`
 
 ## GitHub Repository Description
 
@@ -259,7 +259,7 @@ A public-health analytics project using Python, SQL, SQLite, scikit-learn, Strea
 
 Suggested GitHub topics:
 
-`healthcare-analytics` `data-science` `python` `sql` `sqlite` `streamlit` `machine-learning` `public-health` `responsible-ai` `portfolio-project`
+`healthcare-analytics` `public-health` `data-science` `python` `sql` `sqlite` `streamlit` `machine-learning` `responsible-ai` `portfolio-project` `maryland` `acs` `cdc-places` `hrsa` `cms`
 
 ## Resume Bullet
 
