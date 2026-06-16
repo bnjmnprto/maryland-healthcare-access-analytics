@@ -22,8 +22,14 @@
     "avg_hospital_star_rating",
     "readmission_rate_pct"
   ],
-  "warning": "These metrics use an external-proxy target from the demonstration dataset. They validate the modeling workflow, not real-world predictive performance. Replace the sample data with official public datasets before operational use.",
+  "warning": "Perfect or near-perfect metrics can occur because this is a small county-level demonstration dataset. These results should not be interpreted as validated predictive performance. These metrics use an external-proxy target from the demonstration dataset. They validate the modeling workflow, not real-world predictive performance. Replace the sample data with official public datasets before operational use.",
   "evaluation_note": "Small county-level sample used for a portfolio demonstration. Metrics are useful for workflow validation, not for operational performance claims.",
+  "evaluation_design": {
+    "test_size": 0.3,
+    "random_state": 42,
+    "stratified_split": true,
+    "selection_policy": "Selected logistic_regression intentionally for reproducibility; random_forest is retained as a comparison model."
+  },
   "models": {
     "logistic_regression": {
       "accuracy": 0.875,

@@ -360,6 +360,7 @@ with limitations_tab:
 - County-level analysis can hide neighborhood-level inequities and should not be used to make individual eligibility decisions.
 - The risk score is a transparent prioritization heuristic, not a clinical diagnosis or causal model.
 - Machine learning metrics are shown to demonstrate workflow literacy on a small sample; they should not be interpreted as deployment evidence.
+- Perfect or near-perfect metrics can occur because this is a small county-level demonstration dataset. These results should not be interpreted as validated predictive performance.
 - Production use would require source-data refreshes, stakeholder review, uncertainty checks, and equity impact assessment.
 """
     )

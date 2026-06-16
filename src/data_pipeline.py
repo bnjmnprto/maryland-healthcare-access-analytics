@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 from typing import Iterable
 
@@ -251,10 +252,11 @@ def write_sqlite_database(tables: dict[str, pd.DataFrame], database_path: Path =
     database_path.parent.mkdir(parents=True, exist_ok=True)
     schema_sql = SCHEMA_PATH.read_text(encoding="utf-8")
 
-    with sqlite3.connect(database_path) as connection:
-        connection.executescript(schema_sql)
-        for table_name, table_df in tables.items():
-            table_df.to_sql(table_name, connection, if_exists="append", index=False)
+    with closing(sqlite3.connect(database_path)) as connection:
+        with connection:
+            connection.executescript(schema_sql)
+            for table_name, table_df in tables.items():
+                table_df.to_sql(table_name, connection, if_exists="append", index=False)
 
 
 def write_processed_outputs(featured: pd.DataFrame, output_dir: Path = PROCESSED_DIR) -> None:

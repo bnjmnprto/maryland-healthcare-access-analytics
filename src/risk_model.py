@@ -27,7 +27,15 @@ PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 FEATURE_TABLE_PATH = PROCESSED_DIR / "model_feature_table.csv"
 MODEL_PATH = PROCESSED_DIR / "access_risk_model.joblib"
 METRICS_PATH = PROCESSED_DIR / "model_metrics.json"
+DEFAULT_RANDOM_STATE = 42
+EVALUATION_TEST_SIZE = 0.30
+SELECTED_MODEL_NAME = "logistic_regression"
 
+PERFECT_OR_NEAR_PERFECT_WARNING = (
+    "Perfect or near-perfect metrics can occur because this is a small county-level "
+    "demonstration dataset. These results should not be interpreted as validated "
+    "predictive performance."
+)
 DEMONSTRATION_WARNING = (
     "These metrics reflect a small demonstration dataset and a rule-derived target. "
     "They should not be interpreted as validated predictive performance."
@@ -103,7 +111,14 @@ def build_models(random_state: int = 42) -> dict[str, Pipeline | RandomForestCla
     logistic = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
-            ("model", LogisticRegression(max_iter=1000, class_weight="balanced")),
+            (
+                "model",
+                LogisticRegression(
+                    max_iter=1000,
+                    class_weight="balanced",
+                    random_state=random_state,
+                ),
+            ),
         ]
     )
     forest = RandomForestClassifier(
@@ -186,6 +201,15 @@ def should_warn_about_metrics(results: dict[str, dict]) -> bool:
     return False
 
 
+def build_warning(target_config: dict, results: dict[str, dict]) -> str:
+    warnings = []
+    if should_warn_about_metrics(results):
+        warnings.append(PERFECT_OR_NEAR_PERFECT_WARNING)
+    if target_config.get("warning"):
+        warnings.append(target_config["warning"])
+    return " ".join(warnings)
+
+
 def extract_feature_interpretation(
     model, model_name: str, feature_columns: list[str]
 ) -> pd.DataFrame:
@@ -210,7 +234,7 @@ def extract_feature_interpretation(
 
 def train_and_evaluate(
     feature_table: pd.DataFrame,
-    random_state: int = 42,
+    random_state: int = DEFAULT_RANDOM_STATE,
     target_mode: str = "external_proxy",
 ) -> dict:
     y, target_config = build_target(feature_table, target_mode)
@@ -220,7 +244,7 @@ def train_and_evaluate(
     x_train, x_test, y_train, y_test = train_test_split(
         x,
         y,
-        test_size=0.30,
+        test_size=EVALUATION_TEST_SIZE,
         random_state=random_state,
         stratify=y,
     )
@@ -232,7 +256,7 @@ def train_and_evaluate(
         results[model_name] = evaluate_model(model, x_test, y_test)
         fitted_models[model_name] = model
 
-    selected_model_name = max(results, key=lambda name: results[name]["f1"])
+    selected_model_name = SELECTED_MODEL_NAME
     selected_model = fitted_models[selected_model_name]
 
     probabilities = selected_model.predict_proba(x)[:, 1]
@@ -257,11 +281,20 @@ def train_and_evaluate(
         "target_cutoff": target_config["cutoff"],
         "is_rule_derived_target": target_config["is_rule_derived_target"],
         "feature_columns": feature_columns,
-        "warning": target_config["warning"] if should_warn_about_metrics(results) else "",
+        "warning": build_warning(target_config, results),
         "evaluation_note": (
             "Small county-level sample used for a portfolio demonstration. Metrics are useful "
             "for workflow validation, not for operational performance claims."
         ),
+        "evaluation_design": {
+            "test_size": EVALUATION_TEST_SIZE,
+            "random_state": random_state,
+            "stratified_split": True,
+            "selection_policy": (
+                "Selected logistic_regression intentionally for reproducibility; "
+                "random_forest is retained as a comparison model."
+            ),
+        },
         "models": results,
     }
 

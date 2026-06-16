@@ -303,7 +303,7 @@ make all
 
 ## Modeling Caveat
 
-The current model uses a small demonstration dataset by default. Even when the default target is not derived from the access risk score, the data values are still sample values unless the optional live-data path is completed and reviewed. Metrics are useful for workflow validation, not operational predictive performance. A production model should be trained and validated against an external observed outcome such as preventable hospitalizations, avoidable emergency department visits, ambulatory care sensitive admissions, appointment wait times, or unmet care due to cost.
+The current model uses a small demonstration dataset by default. Even when the default target is not derived from the access risk score, the data values are still sample values unless the optional live-data path is completed and reviewed. Perfect or near-perfect metrics can occur because this is a small county-level demonstration dataset. These results should not be interpreted as validated predictive performance. Metrics are useful for workflow validation, not operational predictive performance. A production model should be trained and validated against an external observed outcome such as preventable hospitalizations, avoidable emergency department visits, ambulatory care sensitive admissions, appointment wait times, or unmet care due to cost.
 
 ## Repository Rename Note
 
