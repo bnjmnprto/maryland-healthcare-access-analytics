@@ -1,52 +1,101 @@
 {
   "project": "Maryland Healthcare Access Analytics",
-  "default_mode": "sample_fallback",
-  "sample_file": "data/raw/maryland_county_health_access_sample.csv",
-  "optional_live_file": "data/raw/maryland_county_health_access_public.csv",
+  "current_committed_data_mode": "mixed_real_and_demo_data",
+  "metadata_file": "data/processed/run_metadata.json",
+  "final_feature_table": "data/processed/healthcare_access_features.csv",
+  "dashboard_file": "data/processed/dashboard_county_risk.csv",
+  "sample_fallback_file": "data/raw/maryland_county_health_access_sample.csv",
+  "mode_summary": "The current committed run uses real public ACS, CDC PLACES, HRSA HPSA, and CMS Hospital Quality data where available. Selected fields remain documented sample reference fallback fields because the current public feeds do not provide equivalent county-level measures in this project.",
+  "real_public_sources_loaded": [
+    {
+      "name": "ACS",
+      "source_name": "U.S. Census ACS 5-year via Census Reporter API",
+      "processed_output": "data/processed/acs_county_demographics.csv",
+      "raw_output": "data/raw/acs/acs_census_reporter_latest.json",
+      "url": "https://api.censusreporter.org/1.0/data/show/latest?table_ids=B01003,B17001,B19013,B27010,B01001,B18101,B08201,B28002&geo_ids=050|04000US24",
+      "used_for": [
+        "population",
+        "poverty rate",
+        "median household income",
+        "uninsured rate",
+        "age 65+ percentage",
+        "disability percentage",
+        "vehicle access proxy",
+        "internet access proxy"
+      ]
+    },
+    {
+      "name": "CDC PLACES",
+      "source_name": "CDC PLACES county-level health indicators",
+      "processed_output": "data/processed/cdc_places_maryland.csv",
+      "raw_output": "data/raw/cdc_places/cdc_places_maryland.json",
+      "url": "https://data.cdc.gov/resource/i46a-9kgh",
+      "used_for": [
+        "poor or fair health",
+        "diabetes prevalence",
+        "high blood pressure prevalence",
+        "obesity prevalence",
+        "current smoking prevalence",
+        "frequent physical distress",
+        "routine checkup",
+        "CDC access-to-care proxy"
+      ]
+    },
+    {
+      "name": "HRSA HPSA",
+      "source_name": "HRSA Health Professional Shortage Area downloads",
+      "processed_output": "data/processed/hrsa_hpsa_maryland.csv",
+      "raw_outputs": [
+        "data/raw/hrsa_hpsa/primary_care_maryland_raw.csv",
+        "data/raw/hrsa_hpsa/mental_health_maryland_raw.csv",
+        "data/raw/hrsa_hpsa/dental_maryland_raw.csv"
+      ],
+      "urls": [
+        "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_PC.csv",
+        "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_MH.csv",
+        "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_DH.csv"
+      ],
+      "used_for": [
+        "primary care HPSA score and designation count",
+        "mental health HPSA score and designation count",
+        "dental HPSA score and designation count"
+      ]
+    },
+    {
+      "name": "CMS Hospital Quality",
+      "source_name": "CMS Provider Data: Hospital General Information",
+      "processed_output": "data/processed/cms_hospital_quality_maryland.csv",
+      "raw_output": "data/raw/cms_hospital_quality/cms_hospital_general_information_maryland.json",
+      "url": "https://data.cms.gov/provider-data/dataset/xubh-q36u",
+      "used_for": [
+        "hospital count",
+        "acute-care hospital count",
+        "emergency services availability",
+        "average hospital overall rating"
+      ]
+    }
+  ],
+  "fallback_fields": [
+    "region",
+    "rural_flag",
+    "pct_nonwhite",
+    "primary_care_physicians_per_100k",
+    "mental_health_providers_per_100k",
+    "dental_providers_per_100k",
+    "hospital_beds_per_1000",
+    "readmission_rate_pct",
+    "preventable_hospital_stays_per_100k",
+    "life_expectancy"
+  ],
   "county_geometry": {
     "file": "data/raw/maryland_counties.geojson",
     "source": "Maryland Open Data County Boundaries",
     "url": "https://opendata.maryland.gov/resource/y8c4-8fr3.geojson?$limit=5000"
   },
-  "public_sources": [
-    {
-      "name": "CDC PLACES county data",
-      "url": "https://data.cdc.gov/resource/i46a-9kgh",
-      "used_for": [
-        "population",
-        "uninsured rate",
-        "diabetes prevalence",
-        "obesity prevalence",
-        "hypertension prevalence",
-        "poor or fair health proxy when available"
-      ]
-    },
-    {
-      "name": "HRSA Primary Care HPSA download",
-      "url": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_PC.csv",
-      "used_for": [
-        "primary care shortage score"
-      ]
-    },
-    {
-      "name": "HRSA Mental Health HPSA download",
-      "url": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_MH.csv",
-      "used_for": [
-        "mental health shortage score"
-      ]
-    },
-    {
-      "name": "CMS Hospital General Information",
-      "url": "https://data.cms.gov/provider-data/dataset/xubh-q36u",
-      "used_for": [
-        "hospital count",
-        "average hospital star rating"
-      ]
-    }
-  ],
   "important_limitations": [
-    "The default committed dataset is a demonstration sample so the project runs without network access.",
-    "The optional live ingestion command fills only fields available from the public feeds and retains documented sample fallback values for missing feature groups.",
-    "The project uses aggregate county-level data only and is not a clinical decision tool."
+    "The project uses aggregate county-level data only and does not use patient-level data.",
+    "The current committed run is mixed_real_and_demo_data with real public sources and documented fallback reference fields.",
+    "Fallback fields are documented sample reference fields only and should be replaced or reviewed before operational use.",
+    "The dashboard and model are not clinical, eligibility, funding, service-denial, or operational decision tools."
   ]
 }

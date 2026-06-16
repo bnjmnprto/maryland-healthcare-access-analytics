@@ -194,7 +194,7 @@ def build_report(raw: pd.DataFrame, processed: pd.DataFrame, metadata: dict, err
 
 {chr(10).join(source_lines)}
 
-The default pipeline now attempts real public ACS and CDC PLACES data first, then adds HRSA HPSA and CMS Hospital General Information when available. The bundled sample file remains as a fallback for fields that are unavailable from those public feeds, including some provider workforce and hospital capacity fields.
+The current committed run is `mixed_real_and_demo_data`: ACS, CDC PLACES, HRSA HPSA, and CMS Hospital Quality are loaded as real public-data sources. The bundled sample file remains only as a documented fallback for selected reference fields that are unavailable from those public feeds, including some provider workforce and hospital capacity fields.
 
 ## Row Counts
 
