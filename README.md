@@ -205,17 +205,23 @@ GitHub Actions workflow: `.github/workflows/project_checks.yml`
 
 CI installs dependencies, runs `make all`, then runs `pytest`. The pipeline uses committed/cached processed public extracts when available so CI is not fragile if a public endpoint is temporarily unavailable.
 
-## Deployment Instructions
+## Deploying on Streamlit Community Cloud
 
-Streamlit Community Cloud:
+Use these manual settings in [Streamlit Community Cloud](https://streamlit.io/cloud):
 
-1. Push this repository to GitHub.
-2. Create a new app in [Streamlit Community Cloud](https://streamlit.io/cloud).
-3. Set the main file path to `dashboard/app.py`.
-4. Confirm `requirements.txt` and `.streamlit/config.toml` are in the repository root.
-5. Deploy.
+| Setting | Value |
+| --- | --- |
+| Repository | `bnjmnprto/maryland-healthcare-access-analytics` |
+| Branch | `main` |
+| Main file path | `dashboard/app.py` |
+| App URL suggestion | `maryland-healthcare-access-analytics` |
+| Python runtime | `python-3.11` via `runtime.txt` |
 
-Local command:
+The deployed app does not require private secrets, API keys, patient data, or startup data downloads. It loads committed processed outputs from `data/processed/` and the committed Maryland county GeoJSON from `data/raw/maryland_counties.geojson`.
+
+After deployment, replace **Live dashboard: Coming soon** near the top of this README with the deployed Streamlit URL.
+
+Local launch command:
 
 ```bash
 streamlit run dashboard/app.py
