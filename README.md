@@ -219,7 +219,7 @@ Use these manual settings in [Streamlit Community Cloud](https://streamlit.io/cl
 
 The deployed app does not require private secrets, API keys, patient data, or startup data downloads. It loads committed processed outputs from `data/processed/` and the committed Maryland county GeoJSON from `data/raw/maryland_counties.geojson`.
 
-After deployment, replace **Live dashboard: Coming soon** near the top of this README with the deployed Streamlit URL.
+The deployed Streamlit URL is listed near the top of this README.
 
 Local launch command:
 
