@@ -6,7 +6,9 @@ A public-health analytics project using Python, SQL, SQLite, scikit-learn, Strea
 
 **Tech stack:** Python, pandas, SQLite, SQL, scikit-learn, Streamlit, Plotly, pytest, GitHub Actions
 
-**Live dashboard:** `https://YOUR-STREAMLIT-APP.streamlit.app`  
+**Live dashboard:** Coming soon  
+This link should be updated after Streamlit Community Cloud deployment.
+
 **Run locally:** `streamlit run dashboard/app.py`
 
 ![Dashboard overview](docs/images/dashboard_overview.png)
@@ -16,6 +18,10 @@ A public-health analytics project using Python, SQL, SQLite, scikit-learn, Strea
 This project is a deployable healthcare analytics portfolio product. It cleans Maryland county-level data, supports optional public-data ingestion with sample fallback, builds a SQLite database, runs SQL analysis, engineers transparent access risk indicators, trains demonstration ML models with clear target-mode documentation, creates AI-style plain-English summaries, and presents everything in a Streamlit dashboard with tests, CI, deployment config, screenshots, model card, data quality report, and responsible-use caveats.
 
 The current committed data is a portfolio simulation with optional public-data ingestion for selected fields. It does not use patient-level data and should not be interpreted as a validated clinical or public-health decision tool.
+
+## Employer Review Summary
+
+This project demonstrates an end-to-end healthcare analytics workflow: public-data ingestion, sample fallback handling, SQL database design, data validation, county-level risk scoring, machine learning workflow documentation, Streamlit dashboarding, choropleth mapping, AI-style summarization, model-card documentation, testing, CI, and executive communication.
 
 ## What This Project Demonstrates
 
@@ -40,6 +46,14 @@ This project shows how to move from raw county indicators to SQL tables, risk fe
 ## Responsible-Use Caveat
 
 This is a professional portfolio project with a default sample dataset and optional live public-data ingestion. The sample findings are not validated public-health conclusions. The dashboard supports analytics demonstration and planning conversations only. It should not be used for diagnosis, treatment, individual eligibility decisions, funding denial, or automated resource allocation.
+
+## Data Mode And Scope
+
+- Default mode uses the committed sample/demo dataset so the project is reproducible without network access.
+- Live-data mode can ingest selected public datasets from CDC PLACES, HRSA HPSA downloads, and CMS Provider Data, while retaining documented sample fallback values for fields not covered by those feeds.
+- The project does not use patient-level data.
+- The machine learning model is for workflow demonstration unless a production real-data mode is completed and validated against an official external outcome.
+- The dashboard is not a clinical, operational, eligibility, funding, or automated decision tool.
 
 ## Why This Is Not A Clinical Decision Tool
 
@@ -289,7 +303,7 @@ make all
 
 ## Modeling Caveat
 
-The current model uses a small demonstration dataset. Even when the default target is not derived from the access risk score, the data values are still sample values. Metrics are useful for workflow validation, not operational predictive performance. A production model should be validated against an external observed outcome such as preventable hospitalizations, avoidable emergency department visits, ambulatory care sensitive admissions, appointment wait times, or unmet care due to cost.
+The current model uses a small demonstration dataset by default. Even when the default target is not derived from the access risk score, the data values are still sample values unless the optional live-data path is completed and reviewed. Metrics are useful for workflow validation, not operational predictive performance. A production model should be trained and validated against an external observed outcome such as preventable hospitalizations, avoidable emergency department visits, ambulatory care sensitive admissions, appointment wait times, or unmet care due to cost.
 
 ## Repository Rename Note
 

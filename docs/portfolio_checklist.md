@@ -56,3 +56,16 @@ Use this checklist before publishing the project on GitHub, LinkedIn, a portfoli
 - [ ] LinkedIn/GitHub portfolio description is added.
 - [ ] Screenshots are added to portfolio page.
 - [ ] Project is described as a healthcare analytics portfolio simulation.
+
+## Final Pre-Publication Checklist
+
+- [ ] Screenshots are real.
+- [ ] Live dashboard link is updated or marked coming soon.
+- [ ] `make all` passes.
+- [ ] `pytest` passes.
+- [ ] GitHub Actions badge works after push.
+- [ ] Repository description is updated.
+- [ ] GitHub topics are added.
+- [ ] Repository is renamed after review.
+- [ ] Repository is pinned on GitHub.
+- [ ] Resume bullet is added.
