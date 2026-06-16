@@ -1,6 +1,6 @@
 # Maryland Healthcare Access Analytics
 
-[![Project Checks](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml/badge.svg?branch=final-real-data-upgrade)](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml)
+[![Project Checks](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml/badge.svg?branch=main)](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml)
 
 A public-health analytics project using Python, SQL, SQLite, scikit-learn, Streamlit, and public county-level datasets to identify Maryland jurisdictions at elevated healthcare access risk.
 

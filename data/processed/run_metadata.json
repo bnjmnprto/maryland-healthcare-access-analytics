@@ -1,7 +1,7 @@
 {
   "project": "Maryland Healthcare Access Analytics",
   "data_mode": "mixed_real_and_demo_data",
-  "run_timestamp": "2026-06-16T06:30:00+00:00",
+  "run_timestamp": "2026-06-16T06:36:00+00:00",
   "data_access_dates": {
     "ACS": "2026-06-16",
     "CDC PLACES": "2026-06-16",

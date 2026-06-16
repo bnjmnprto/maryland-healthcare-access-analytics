@@ -67,7 +67,6 @@ Use this checklist before publishing the project on GitHub, LinkedIn, a portfoli
 - [ ] `make all` passes.
 - [ ] `pytest` passes.
 - [ ] GitHub Actions badge works after push.
-- [ ] After merging this branch, update the README GitHub Actions badge branch from `final-real-data-upgrade` to `main`.
 - [ ] Repository description is updated.
 - [ ] GitHub topics are added.
 - [ ] Repository is renamed after review.
