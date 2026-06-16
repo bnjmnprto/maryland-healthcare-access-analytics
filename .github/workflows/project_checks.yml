@@ -2,7 +2,7 @@ name: Project Checks
 
 on:
   push:
-    branches: [main, ten-out-of-ten-upgrade]
+    branches: [main, ten-out-of-ten-upgrade, final-real-data-upgrade]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -25,17 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Build processed data
-        run: python src/data_pipeline.py
-
-      - name: Validate data
-        run: python src/validate_data.py
-
-      - name: Train model
-        run: python src/risk_model.py
-
-      - name: Generate AI-style summaries
-        run: python src/ai_summary.py
+      - name: Run project pipeline
+        run: make all
 
       - name: Run tests
         run: pytest

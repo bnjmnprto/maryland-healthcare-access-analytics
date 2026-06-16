@@ -1,4 +1,4 @@
-.PHONY: setup live-data live-pipeline data validate model summaries dashboard test all
+.PHONY: setup fetch-data live-data live-pipeline data validate model summaries dashboard test all
 
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 PIP ?= $(PYTHON) -m pip
@@ -7,11 +7,16 @@ STREAMLIT ?= $(if $(wildcard .venv/bin/streamlit),.venv/bin/streamlit,$(PYTHON) 
 setup:
 	$(PIP) install -r requirements.txt
 
-live-data:
-	$(PYTHON) src/public_data_ingestion.py --output data/raw/maryland_county_health_access_public.csv
+fetch-data:
+	$(PYTHON) src/fetch_acs.py --refresh
+	$(PYTHON) src/fetch_cdc_places.py --refresh
+	$(PYTHON) src/fetch_hrsa_hpsa.py --refresh
+	$(PYTHON) src/fetch_cms_hospital_quality.py --refresh
 
-live-pipeline: live-data
-	$(PYTHON) src/data_pipeline.py --raw-path data/raw/maryland_county_health_access_public.csv
+live-data: fetch-data
+
+live-pipeline: fetch-data
+	$(PYTHON) src/data_pipeline.py --refresh-public
 
 data:
 	$(PYTHON) src/data_pipeline.py

@@ -1,0 +1,120 @@
+{
+  "project": "Maryland Healthcare Access Analytics",
+  "data_mode": "mixed_real_and_demo_data",
+  "run_timestamp": "2026-06-16T06:16:15+00:00",
+  "data_access_dates": {
+    "ACS": "2026-06-16",
+    "CDC PLACES": "2026-06-16",
+    "HRSA HPSA": "2026-06-16",
+    "CMS Hospital Quality": "2026-06-16"
+  },
+  "sources_successfully_loaded": [
+    "ACS",
+    "CDC PLACES",
+    "CMS Hospital Quality",
+    "HRSA HPSA"
+  ],
+  "sources_using_fallback": [
+    "sample reference fields"
+  ],
+  "source_metadata": {
+    "ACS": {
+      "source_name": "U.S. Census ACS 5-year via Census Reporter API",
+      "access_url": "https://api.censusreporter.org/1.0/data/show/latest?table_ids=B01003,B17001,B19013,B27010,B01001,B18101,B08201,B28002&geo_ids=050|04000US24",
+      "release": {
+        "id": "acs2024_5yr",
+        "name": "ACS 2024 5-year",
+        "years": "2020-2024"
+      },
+      "date_accessed": "2026-06-16",
+      "rows": 24,
+      "variables": {
+        "population": "ACS B01003 total population",
+        "poverty_pct": "ACS B17001 population below poverty / poverty universe",
+        "median_household_income": "ACS B19013 median household income",
+        "uninsured_pct": "ACS B27010 no health insurance coverage / coverage universe",
+        "age_65_plus_pct": "ACS B01001 population age 65+ / total population",
+        "disability_pct": "ACS B18101 population with a disability / civilian noninstitutionalized population",
+        "transportation_access_proxy": "ACS B08201 households with no vehicle available / households",
+        "internet_access_gap_pct": "ACS B28002 households with no internet access / households"
+      },
+      "status": "loaded",
+      "notes": "Census Reporter exposes ACS estimates without requiring a Census API key. For production, teams may swap in direct api.census.gov calls with an API key."
+    },
+    "CDC PLACES": {
+      "source_name": "CDC PLACES county-level health indicators",
+      "access_url": "https://data.cdc.gov/resource/i46a-9kgh.json?$limit=5000&stateabbr=MD",
+      "release": "CDC PLACES county API",
+      "date_accessed": "2026-06-16",
+      "rows": 24,
+      "variables": {
+        "poor_or_fair_health_pct": "CDC PLACES GHLTH crude prevalence",
+        "diabetes_pct": "CDC PLACES DIABETES crude prevalence",
+        "high_blood_pressure_pct": "CDC PLACES BPHIGH crude prevalence",
+        "obesity_pct": "CDC PLACES OBESITY crude prevalence",
+        "smoking_pct": "CDC PLACES CSMOKING crude prevalence",
+        "frequent_physical_distress_pct": "CDC PLACES PHLTH crude prevalence",
+        "routine_checkup_pct": "CDC PLACES CHECKUP crude prevalence",
+        "places_uninsured_pct": "CDC PLACES ACCESS2 crude prevalence"
+      },
+      "status": "loaded"
+    },
+    "HRSA HPSA": {
+      "source_name": "HRSA Health Professional Shortage Area downloads",
+      "access_urls": {
+        "primary_care": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_PC.csv",
+        "mental_health": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_MH.csv",
+        "dental": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_DH.csv"
+      },
+      "date_accessed": "2026-06-16",
+      "rows": 24,
+      "source_rows": {
+        "primary_care": 1706,
+        "mental_health": 850,
+        "dental": 1097
+      },
+      "sources_loaded": [
+        "primary_care",
+        "mental_health",
+        "dental"
+      ],
+      "status": "loaded",
+      "variables": {
+        "hpsa_primary_care_score": "Maximum HRSA primary care HPSA score by county",
+        "hpsa_mental_health_score": "Maximum HRSA mental health HPSA score by county",
+        "hpsa_dental_score": "Maximum HRSA dental HPSA score by county",
+        "hpsa_*_designated": "1 when the county has at least one designated HPSA record"
+      }
+    },
+    "CMS Hospital Quality": {
+      "source_name": "CMS Provider Data: Hospital General Information",
+      "access_url": "https://data.cms.gov/provider-data/dataset/xubh-q36u",
+      "api_url_template": "https://data.cms.gov/provider-data/api/1/datastore/query/xubh-q36u/0?limit=1000&offset={offset}",
+      "date_accessed": "2026-06-16",
+      "rows": 24,
+      "status": "loaded",
+      "variables": {
+        "hospital_count": "CMS hospital facility count by county",
+        "acute_care_hospitals": "CMS acute care hospital count by county",
+        "emergency_services_count": "Hospitals reporting emergency services = Yes",
+        "avg_hospital_star_rating": "Average numeric CMS overall hospital rating by county"
+      },
+      "notes": "The CMS General Information file does not include hospital beds or a county-level readmission rate, so those exact fields remain documented fallback inputs."
+    }
+  },
+  "source_fallback_fields": [
+    "region",
+    "rural_flag",
+    "pct_nonwhite",
+    "primary_care_physicians_per_100k",
+    "mental_health_providers_per_100k",
+    "dental_providers_per_100k",
+    "hospital_beds_per_1000",
+    "readmission_rate_pct",
+    "preventable_hospital_stays_per_100k",
+    "life_expectancy"
+  ],
+  "maryland_jurisdictions_represented": 24,
+  "all_24_jurisdictions_present": true,
+  "notes": "Default mode attempts real ACS and CDC PLACES data first. HRSA/CMS are integrated when available. A documented sample file fills fields not provided by those feeds."
+}

@@ -2,24 +2,24 @@
 
 ## 30-Second Explanation
 
-I built Maryland Healthcare Access Analytics, a public-health analytics project for Maryland counties using Python, SQL, SQLite, scikit-learn, and Streamlit. The project cleans county-level healthcare and demographic data, supports optional public-data ingestion with sample fallback, engineers interpretable risk indicators, stores the data in a SQLite database, runs SQL analysis, trains demonstration ML models, and presents the results in an interactive dashboard with responsible-use caveats.
+I built Maryland Healthcare Access Analytics, a public-health analytics project for Maryland counties using Python, SQL, SQLite, scikit-learn, and Streamlit. The project now defaults to real public data where feasible, including ACS, CDC PLACES, HRSA HPSA, and CMS hospital data, while documenting fallback fields. It engineers interpretable risk indicators, stores the data in SQLite, runs SQL analysis, trains a reproducible ML workflow, and presents the results in an interactive dashboard with responsible-use caveats.
 
 ## 2-Minute Explanation
 
-This project is a healthcare analytics portfolio simulation focused on county-level access risk in Maryland. I created a reproducible workflow that starts with a stable sample CSV by default, includes optional live ingestion for selected public sources, validates and cleans county records, engineers four access risk components, and calculates a transparent risk score.
+This project is a healthcare analytics portfolio product focused on county-level access risk in Maryland. I created a reproducible workflow that attempts real public source data first, keeps cached extracts for stable reruns, validates county records, engineers five access risk components, and calculates a transparent risk score.
 
-The four components are provider access gap, socioeconomic need, chronic disease burden, and hospital quality/capacity gap. I then publish the outputs to a normalized SQLite database and dashboard-ready CSV files. The SQL layer answers questions like which counties have the highest risk, which combine poverty and uninsured burden with poor provider access, and how counties compare to the state average.
+The five components are socioeconomic vulnerability, insurance/access burden, chronic disease burden, provider shortage burden, and hospital availability/quality burden. I then publish the outputs to a normalized SQLite database and dashboard-ready CSV files. The SQL layer answers questions like which counties have the highest risk, which combine poverty and chronic disease burden, and how counties compare to the state average.
 
-For machine learning, I trained logistic regression and random forest models using a default external-proxy target: counties in the top quartile of poor/fair health rate. I also support a separate demo mode that uses a score-derived target. I explicitly document that both modes are demonstration-oriented because the dataset is small and sample-based. The dashboard includes model results, feature importance, county comparison tools, and template-based plain-English summaries that do not require an API key.
+For machine learning, I trained logistic regression and random forest models using a target hierarchy. The current default target is HRSA provider-shortage burden, and HPSA-derived predictor fields are excluded to avoid circular modeling. The dashboard includes model results, feature importance, county comparison tools, source-quality metadata, and template-based plain-English summaries that do not require an API key.
 
 The main thing I wanted to show is that I can build an end-to-end healthcare analytics project while communicating clearly and avoiding overclaims.
 
 ## Technical Explanation
 
-- `src/data_pipeline.py` loads the raw county-level sample, validates required columns, standardizes FIPS codes, creates min-max scaled features, calculates composite risk components, writes processed CSVs, and populates SQLite tables.
-- `sql/schema.sql` defines the database tables: counties, demographics, health outcomes, provider shortages, hospital quality, and access risk scores.
+- `src/data_pipeline.py` loads cached or refreshed public source extracts, applies documented fallback fields, validates required columns, standardizes FIPS codes, creates min-max scaled features, calculates composite risk components, writes processed CSVs, and populates SQLite tables.
+- `sql/schema.sql` defines the database tables: counties, demographics, health outcomes, provider shortages, hospital quality, access risk scores, source status, final features, and model outputs.
 - `sql/queries.sql` answers portfolio-ready healthcare analytics questions using joins and state-average comparisons.
-- `src/risk_model.py` trains logistic regression and random forest models, supports external-proxy and demo target modes, exports metrics, predictions, feature importance, and a warning when metrics look too strong for the demonstration setting.
+- `src/risk_model.py` trains logistic regression and random forest models, supports an HRSA-first target hierarchy, exports metrics, predictions, feature importance, and a warning when metrics look too strong for the small dataset.
 - `src/ai_summary.py` creates template-based county summaries without requiring an API key.
 - `dashboard/app.py` presents the workflow in Streamlit using tabs for overview, risk ranking, county comparison, model results, county summaries, and responsible-use notes.
 
@@ -47,7 +47,7 @@ The project uses AI assistance as a communication layer, not as a substitute for
 
 ## Why The ML Metrics Should Not Be Overinterpreted
 
-The default target is not derived from the project risk score; it is based on the top quartile of poor/fair health rate. That is a better portfolio target, but it is still built from sample data and only 24 county rows. The optional `demo_score` mode is explicitly score-derived and should only be used to demonstrate workflow mechanics.
+The default target is not derived from the project risk score; it is based on the top quartile of HRSA provider-shortage burden. That is a better portfolio target, but it is still a county-level proxy with only 24 rows. The optional demo rule-derived mode is explicitly score-derived and should only be used to demonstrate workflow mechanics.
 
 Perfect or near-perfect metrics show that the code path works, but they do not prove validated predictive performance. In a production model, I would use an external outcome such as preventable hospitalizations or avoidable emergency department visits and validate across multiple years.
 
@@ -65,13 +65,13 @@ This project maps well to healthcare data analyst work because it combines:
 
 ## Likely Employer Questions And Strong Answers
 
-### Why did you choose these four risk components?
+### Why did you choose these five risk components?
 
-They cover access supply, socioeconomic barriers, care demand, and facility context. Provider access is weighted most heavily because the project is focused on access risk. Socioeconomic need and chronic burden are also important because affordability and disease burden can drive delayed care and preventable utilization.
+They cover socioeconomic vulnerability, practical insurance/transportation/digital barriers, care demand, provider shortage, and facility context. The weights are transparent assumptions and should be reviewed with stakeholders before operational use.
 
 ### Is this model ready for deployment?
 
-No. The model is demonstration-oriented. The default target is an external-proxy sample target, and the optional demo target is score-derived. The workflow is useful for showing feature engineering, modeling, evaluation, and dashboard integration, but production use would require official data and external validation.
+No. The model is demonstration-oriented. The default target is an external public proxy from HRSA, and the optional demo target is score-derived. The workflow is useful for showing feature engineering, modeling, evaluation, and dashboard integration, but production use would require validated outcomes and stakeholder review.
 
 ### What outcome would you use for validation?
 
@@ -79,7 +79,7 @@ I would start with preventable hospitalizations or avoidable emergency departmen
 
 ### How did you avoid overclaiming?
 
-I labeled the sample data as illustrative, documented responsible-use limitations, added a dashboard warning for near-perfect metrics, and wrote the executive summary as a portfolio simulation rather than an operational public-health report.
+I record the data mode in metadata, document every fallback field, added a dashboard warning for near-perfect metrics, and describe results as planning signals rather than operational public-health conclusions.
 
 ### What is the strongest part of this project?
 

@@ -1,0 +1,18 @@
+{
+  "source_name": "CDC PLACES county-level health indicators",
+  "access_url": "https://data.cdc.gov/resource/i46a-9kgh.json?$limit=5000&stateabbr=MD",
+  "release": "CDC PLACES county API",
+  "date_accessed": "2026-06-16",
+  "rows": 24,
+  "variables": {
+    "poor_or_fair_health_pct": "CDC PLACES GHLTH crude prevalence",
+    "diabetes_pct": "CDC PLACES DIABETES crude prevalence",
+    "high_blood_pressure_pct": "CDC PLACES BPHIGH crude prevalence",
+    "obesity_pct": "CDC PLACES OBESITY crude prevalence",
+    "smoking_pct": "CDC PLACES CSMOKING crude prevalence",
+    "frequent_physical_distress_pct": "CDC PLACES PHLTH crude prevalence",
+    "routine_checkup_pct": "CDC PLACES CHECKUP crude prevalence",
+    "places_uninsured_pct": "CDC PLACES ACCESS2 crude prevalence"
+  },
+  "status": "loaded"
+}

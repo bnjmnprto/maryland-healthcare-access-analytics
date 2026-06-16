@@ -1,15 +1,24 @@
 feature,importance,direction,coefficient
-poverty_pct,0.6021600026148705,increases risk,0.6021600026148705
-hpsa_mental_health_score,0.48574941415862366,increases risk,0.48574941415862366
-preventable_hospital_stays_per_100k,0.48189197773403275,increases risk,0.48189197773403275
-hpsa_primary_care_score,0.4602418442945457,increases risk,0.4602418442945457
-uninsured_pct,0.42205066310048456,increases risk,0.42205066310048456
-diabetes_pct,0.3899045183228217,increases risk,0.3899045183228217
-readmission_rate_pct,0.3593939357106875,increases risk,0.3593939357106875
-obesity_pct,0.34606857547467434,increases risk,0.34606857547467434
-hypertension_pct,0.3253035026128176,increases risk,0.3253035026128176
-avg_hospital_star_rating,0.16026120771103838,decreases risk,-0.16026120771103838
-dental_providers_per_100k,0.14912551525870696,decreases risk,-0.14912551525870696
-pct_age_65_plus,0.0999036771630727,decreases risk,-0.0999036771630727
-mental_health_providers_per_100k,0.08670644109690964,decreases risk,-0.08670644109690964
-primary_care_physicians_per_100k,0.07378455802025982,decreases risk,-0.07378455802025982
+uninsured_pct,0.9049961611567366,increases target likelihood,0.9049961611567366
+insurance_access_burden_index,0.7037669215715393,increases target likelihood,0.7037669215715393
+poverty_pct,0.5962908969110101,increases target likelihood,0.5962908969110101
+hypertension_pct,0.424963448479907,decreases target likelihood,-0.424963448479907
+disability_pct,0.4196951268639961,decreases target likelihood,-0.4196951268639961
+poor_or_fair_health_pct,0.38035004062733335,increases target likelihood,0.38035004062733335
+pct_age_65_plus,0.32324260237969504,decreases target likelihood,-0.32324260237969504
+emergency_services_count,0.28780145997543943,increases target likelihood,0.28780145997543943
+acute_care_hospitals,0.27870960761574626,increases target likelihood,0.27870960761574626
+transportation_access_proxy,0.2227928042585263,increases target likelihood,0.2227928042585263
+internet_access_gap_pct,0.19001130719083,decreases target likelihood,-0.19001130719083
+smoking_pct,0.16847154936474137,decreases target likelihood,-0.16847154936474137
+hospital_count_per_100k,0.15337927034959278,decreases target likelihood,-0.15337927034959278
+socioeconomic_need_index,0.14432380838759176,increases target likelihood,0.14432380838759176
+median_household_income,0.1404713732758435,decreases target likelihood,-0.1404713732758435
+hospital_quality_gap_index,0.10058517735576009,increases target likelihood,0.10058517735576009
+diabetes_pct,0.08678492947467586,decreases target likelihood,-0.08678492947467586
+obesity_pct,0.08253045813411125,increases target likelihood,0.08253045813411125
+avg_hospital_star_rating,0.050762447696307576,increases target likelihood,0.050762447696307576
+hospital_count,0.0333596604957756,increases target likelihood,0.0333596604957756
+frequent_physical_distress_pct,0.021401988196646238,decreases target likelihood,-0.021401988196646238
+chronic_burden_index,0.012307317560600472,decreases target likelihood,-0.012307317560600472
+routine_checkup_pct,0.003967385358566193,increases target likelihood,0.003967385358566193

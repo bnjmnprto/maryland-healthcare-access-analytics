@@ -1,0 +1,25 @@
+county_fips,county_name,hpsa_primary_care_count,hpsa_primary_care_score,hpsa_primary_care_designated,hpsa_mental_health_count,hpsa_mental_health_score,hpsa_mental_health_designated,hpsa_dental_count,hpsa_dental_score,hpsa_dental_designated,date_accessed,source_hrsa_hpsa
+24001,Allegany,2,18.0,1,3,17.0,1,2,18.0,1,2026-06-16,real_public_data
+24003,Anne Arundel,1,18.0,1,2,12.0,1,1,20.0,1,2026-06-16,real_public_data
+24005,Baltimore County,3,18.0,1,2,18.0,1,0,0.0,0,2026-06-16,real_public_data
+24510,Baltimore City,19,24.0,1,10,22.0,1,8,26.0,1,2026-06-16,real_public_data
+24009,Calvert,1,13.0,1,1,14.0,1,0,0.0,0,2026-06-16,real_public_data
+24011,Caroline,2,20.0,1,2,23.0,1,1,24.0,1,2026-06-16,real_public_data
+24013,Carroll,1,15.0,1,1,16.0,1,0,0.0,0,2026-06-16,real_public_data
+24015,Cecil,2,20.0,1,2,17.0,1,1,24.0,1,2026-06-16,real_public_data
+24017,Charles,1,16.0,1,1,14.0,1,0,0.0,0,2026-06-16,real_public_data
+24019,Dorchester,1,19.0,1,1,14.0,1,1,17.0,1,2026-06-16,real_public_data
+24021,Frederick,2,20.0,1,2,17.0,1,1,26.0,1,2026-06-16,real_public_data
+24023,Garrett,2,18.0,1,2,18.0,1,1,20.0,1,2026-06-16,real_public_data
+24025,Harford,1,14.0,1,1,12.0,1,1,6.0,1,2026-06-16,real_public_data
+24027,Howard,0,0.0,0,0,0.0,0,0,0.0,0,2026-06-16,real_public_data
+24029,Kent,1,17.0,1,1,12.0,1,0,0.0,0,2026-06-16,real_public_data
+24031,Montgomery,5,21.0,1,2,22.0,1,3,25.0,1,2026-06-16,real_public_data
+24033,Prince George's,4,22.0,1,3,22.0,1,1,26.0,1,2026-06-16,real_public_data
+24035,Queen Anne's,1,16.0,1,1,14.0,1,0,0.0,0,2026-06-16,real_public_data
+24037,St. Mary's,1,10.0,1,1,14.0,1,0,0.0,0,2026-06-16,real_public_data
+24039,Somerset,1,20.0,1,1,18.0,1,1,16.0,1,2026-06-16,real_public_data
+24041,Talbot,0,0.0,0,0,0.0,0,1,15.0,1,2026-06-16,real_public_data
+24043,Washington,3,21.0,1,5,18.0,1,2,25.0,1,2026-06-16,real_public_data
+24045,Wicomico,2,21.0,1,2,22.0,1,2,26.0,1,2026-06-16,real_public_data
+24047,Worcester,1,15.0,1,1,12.0,1,1,11.0,1,2026-06-16,real_public_data

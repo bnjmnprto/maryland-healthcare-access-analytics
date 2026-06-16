@@ -1,0 +1,25 @@
+county_fips,county_name,hospital_count,acute_care_hospitals,emergency_services_count,readmission_worse_measure_count,avg_hospital_star_rating,date_accessed,source_cms_hospital_quality
+24001,Allegany,2.0,1.0,1.0,1.0,4.0,2026-06-16,real_public_data
+24003,Anne Arundel,3.0,2.0,3.0,2.0,4.0,2026-06-16,real_public_data
+24005,Baltimore County,7.0,5.0,4.0,4.0,3.75,2026-06-16,real_public_data
+24510,Baltimore City,14.0,12.0,11.0,14.0,3.3636363636363638,2026-06-16,real_public_data
+24009,Calvert,1.0,1.0,1.0,0.0,5.0,2026-06-16,real_public_data
+24011,Caroline,0.0,0.0,0.0,0.0,0.0,2026-06-16,real_public_data
+24013,Carroll,2.0,1.0,1.0,1.0,3.0,2026-06-16,real_public_data
+24015,Cecil,2.0,2.0,0.0,1.0,4.0,2026-06-16,real_public_data
+24017,Charles,1.0,1.0,1.0,2.0,3.0,2026-06-16,real_public_data
+24019,Dorchester,1.0,0.0,0.0,0.0,0.0,2026-06-16,real_public_data
+24021,Frederick,1.0,1.0,1.0,1.0,3.0,2026-06-16,real_public_data
+24023,Garrett,1.0,1.0,1.0,0.0,4.0,2026-06-16,real_public_data
+24025,Harford,2.0,1.0,2.0,1.0,2.0,2026-06-16,real_public_data
+24027,Howard,1.0,1.0,1.0,2.0,3.0,2026-06-16,real_public_data
+24029,Kent,1.0,1.0,1.0,0.0,5.0,2026-06-16,real_public_data
+24031,Montgomery,7.0,7.0,6.0,13.0,2.5,2026-06-16,real_public_data
+24033,Prince George's,0.0,0.0,0.0,0.0,0.0,2026-06-16,real_public_data
+24035,Queen Anne's,0.0,0.0,0.0,0.0,0.0,2026-06-16,real_public_data
+24037,St. Mary's,0.0,0.0,0.0,0.0,0.0,2026-06-16,real_public_data
+24039,Somerset,0.0,0.0,0.0,0.0,0.0,2026-06-16,real_public_data
+24041,Talbot,1.0,1.0,1.0,0.0,4.0,2026-06-16,real_public_data
+24043,Washington,2.0,1.0,1.0,4.0,3.0,2026-06-16,real_public_data
+24045,Wicomico,1.0,1.0,1.0,2.0,4.0,2026-06-16,real_public_data
+24047,Worcester,1.0,1.0,1.0,1.0,3.0,2026-06-16,real_public_data

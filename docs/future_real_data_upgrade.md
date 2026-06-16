@@ -1,6 +1,6 @@
 # Future Real-Data Upgrade Plan
 
-This project currently uses a runnable demonstration dataset by default and includes optional live ingestion for selected CDC PLACES, HRSA HPSA, and CMS Provider Data fields. A production-quality version should replace remaining sample fallback fields with official public datasets, preserve source lineage, and validate the risk score against an external outcome.
+This project now attempts real public county-level data by default and uses documented fallback fields where public feeds do not provide an equivalent measure. The current run uses ACS, CDC PLACES, HRSA HPSA, and CMS Hospital General Information data with remaining sample fallback fields. A production-quality version should replace those fallback fields with official public datasets, preserve source lineage, and validate the risk score against an external outcome.
 
 ## U.S. Census ACS County Demographics
 

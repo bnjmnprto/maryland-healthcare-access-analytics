@@ -1,0 +1,27 @@
+{
+  "source_name": "HRSA Health Professional Shortage Area downloads",
+  "access_urls": {
+    "primary_care": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_PC.csv",
+    "mental_health": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_MH.csv",
+    "dental": "https://data.hrsa.gov/DataDownload/DD_Files/BCD_HPSA_FCT_DET_DH.csv"
+  },
+  "date_accessed": "2026-06-16",
+  "rows": 24,
+  "source_rows": {
+    "primary_care": 1706,
+    "mental_health": 850,
+    "dental": 1097
+  },
+  "sources_loaded": [
+    "primary_care",
+    "mental_health",
+    "dental"
+  ],
+  "status": "loaded",
+  "variables": {
+    "hpsa_primary_care_score": "Maximum HRSA primary care HPSA score by county",
+    "hpsa_mental_health_score": "Maximum HRSA mental health HPSA score by county",
+    "hpsa_dental_score": "Maximum HRSA dental HPSA score by county",
+    "hpsa_*_designated": "1 when the county has at least one designated HPSA record"
+  }
+}

@@ -1,76 +1,127 @@
 {
   "selected_model": "logistic_regression",
-  "target": "high_poor_or_fair_health_rate",
-  "target_mode": "external_proxy",
-  "target_description": "High poor/fair health rate based on the top quartile of the county-level poor_or_fair_health_pct field. This is an external-proxy target because it is not derived from the project access risk score, but the included values are still sample data.",
-  "target_source": "Portfolio sample field modeled after CDC PLACES / County Health Rankings-style poor-or-fair-health estimates. Replace with official public data for production.",
-  "target_cutoff": 17.375,
+  "model_name": "logistic_regression",
+  "target": "high_hrsa_provider_shortage_burden",
+  "target_name": "high_hrsa_provider_shortage_burden",
+  "target_mode": "independent_external",
+  "target_description": "High HRSA provider-shortage burden based on the top quartile of county HPSA score/count burden. HPSA-derived predictor fields are excluded to avoid silently training on the target inputs.",
+  "target_source": "HRSA HPSA public downloads aggregated to Maryland county FIPS.",
+  "target_cutoff": 50.812,
   "is_rule_derived_target": false,
   "feature_columns": [
     "poverty_pct",
+    "median_household_income",
     "uninsured_pct",
     "pct_age_65_plus",
-    "primary_care_physicians_per_100k",
-    "mental_health_providers_per_100k",
-    "dental_providers_per_100k",
-    "hpsa_primary_care_score",
-    "hpsa_mental_health_score",
+    "disability_pct",
+    "transportation_access_proxy",
+    "internet_access_gap_pct",
+    "hospital_count",
+    "acute_care_hospitals",
+    "emergency_services_count",
+    "avg_hospital_star_rating",
+    "hospital_count_per_100k",
     "diabetes_pct",
     "obesity_pct",
     "hypertension_pct",
-    "preventable_hospital_stays_per_100k",
-    "avg_hospital_star_rating",
-    "readmission_rate_pct"
+    "poor_or_fair_health_pct",
+    "smoking_pct",
+    "frequent_physical_distress_pct",
+    "routine_checkup_pct",
+    "socioeconomic_need_index",
+    "insurance_access_burden_index",
+    "chronic_burden_index",
+    "hospital_quality_gap_index"
   ],
-  "warning": "Perfect or near-perfect metrics can occur because this is a small county-level demonstration dataset. These results should not be interpreted as validated predictive performance. These metrics use an external-proxy target from the demonstration dataset. They validate the modeling workflow, not real-world predictive performance. Replace the sample data with official public datasets before operational use.",
-  "evaluation_note": "Small county-level sample used for a portfolio demonstration. Metrics are useful for workflow validation, not for operational performance claims.",
+  "excluded_target_source_features": [
+    "dental_providers_per_100k",
+    "hpsa_dental_count",
+    "hpsa_dental_designated",
+    "hpsa_dental_score",
+    "hpsa_mental_health_count",
+    "hpsa_mental_health_designated",
+    "hpsa_mental_health_score",
+    "hpsa_primary_care_count",
+    "hpsa_primary_care_designated",
+    "hpsa_primary_care_score",
+    "mental_health_providers_per_100k",
+    "primary_care_physicians_per_100k"
+  ],
+  "warning": "Perfect or near-perfect metrics can occur with small county-level datasets and should not be interpreted as validated predictive performance. This target is an external proxy from public aggregate data. It supports workflow demonstration, not validated operational prediction.",
+  "evaluation_note": "Small county-level dataset used for a portfolio demonstration. Metrics are useful for workflow validation, not for operational performance claims.",
   "evaluation_design": {
     "test_size": 0.3,
     "random_state": 42,
     "stratified_split": true,
+    "cross_validation": {
+      "logistic_regression": {
+        "enabled": true,
+        "n_splits": 3,
+        "scoring": "accuracy",
+        "scores": [
+          1.0,
+          0.875,
+          0.75
+        ],
+        "mean_accuracy": 0.875,
+        "std_accuracy": 0.102
+      },
+      "random_forest": {
+        "enabled": true,
+        "n_splits": 3,
+        "scoring": "accuracy",
+        "scores": [
+          0.75,
+          1.0,
+          0.75
+        ],
+        "mean_accuracy": 0.833,
+        "std_accuracy": 0.118
+      }
+    },
     "selection_policy": "Selected logistic_regression intentionally for reproducibility; random_forest is retained as a comparison model."
   },
   "models": {
     "logistic_regression": {
       "accuracy": 0.875,
-      "precision": 0.667,
-      "recall": 1.0,
-      "f1": 0.8,
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.667,
       "roc_auc": 1.0,
       "confusion_matrix": [
         [
-          5,
-          1
+          6,
+          0
         ],
         [
-          0,
-          2
+          1,
+          1
         ]
       ],
       "classification_report": {
         "0": {
-          "precision": 1.0,
-          "recall": 0.8333333333333334,
-          "f1-score": 0.9090909090909091,
+          "precision": 0.8571428571428571,
+          "recall": 1.0,
+          "f1-score": 0.9230769230769231,
           "support": 6.0
         },
         "1": {
-          "precision": 0.6666666666666666,
-          "recall": 1.0,
-          "f1-score": 0.8,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1-score": 0.6666666666666666,
           "support": 2.0
         },
         "accuracy": 0.875,
         "macro avg": {
-          "precision": 0.8333333333333333,
-          "recall": 0.9166666666666667,
-          "f1-score": 0.8545454545454545,
+          "precision": 0.9285714285714286,
+          "recall": 0.75,
+          "f1-score": 0.7948717948717949,
           "support": 8.0
         },
         "weighted avg": {
-          "precision": 0.9166666666666666,
+          "precision": 0.8928571428571428,
           "recall": 0.875,
-          "f1-score": 0.8818181818181818,
+          "f1-score": 0.8589743589743589,
           "support": 8.0
         }
       }

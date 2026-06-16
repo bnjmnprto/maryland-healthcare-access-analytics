@@ -1,25 +1,25 @@
 county_fips,county_name,access_risk_score,target_mode,target,actual_target,predicted_target,predicted_target_probability,predicted_high_risk,predicted_high_risk_probability
-24001,Allegany,68.7,external_proxy,high_poor_or_fair_health_rate,1,1,0.919,1,0.919
-24003,Anne Arundel,26.2,external_proxy,high_poor_or_fair_health_rate,0,0,0.002,0,0.002
-24510,Baltimore City,60.5,external_proxy,high_poor_or_fair_health_rate,1,1,0.979,1,0.979
-24005,Baltimore County,37.2,external_proxy,high_poor_or_fair_health_rate,0,0,0.028,0,0.028
-24009,Calvert,36.1,external_proxy,high_poor_or_fair_health_rate,0,0,0.008,0,0.008
-24011,Caroline,76.6,external_proxy,high_poor_or_fair_health_rate,1,1,0.959,1,0.959
-24013,Carroll,27.6,external_proxy,high_poor_or_fair_health_rate,0,0,0.001,0,0.001
-24015,Cecil,58.0,external_proxy,high_poor_or_fair_health_rate,0,0,0.377,0,0.377
-24017,Charles,49.3,external_proxy,high_poor_or_fair_health_rate,0,0,0.096,0,0.096
-24019,Dorchester,82.0,external_proxy,high_poor_or_fair_health_rate,1,1,0.986,1,0.986
-24021,Frederick,27.5,external_proxy,high_poor_or_fair_health_rate,0,0,0.002,0,0.002
-24023,Garrett,67.4,external_proxy,high_poor_or_fair_health_rate,0,1,0.768,1,0.768
-24025,Harford,37.6,external_proxy,high_poor_or_fair_health_rate,0,0,0.013,0,0.013
-24027,Howard,7.4,external_proxy,high_poor_or_fair_health_rate,0,0,0.0,0,0.0
-24029,Kent,52.6,external_proxy,high_poor_or_fair_health_rate,0,0,0.098,0,0.098
-24031,Montgomery,14.6,external_proxy,high_poor_or_fair_health_rate,0,0,0.001,0,0.001
-24033,Prince George's,55.8,external_proxy,high_poor_or_fair_health_rate,0,0,0.39,0,0.39
-24035,Queen Anne's,43.2,external_proxy,high_poor_or_fair_health_rate,0,0,0.013,0,0.013
-24039,Somerset,93.9,external_proxy,high_poor_or_fair_health_rate,1,1,0.999,1,0.999
-24037,St. Mary's,44.6,external_proxy,high_poor_or_fair_health_rate,0,0,0.043,0,0.043
-24041,Talbot,31.4,external_proxy,high_poor_or_fair_health_rate,0,0,0.003,0,0.003
-24043,Washington,55.8,external_proxy,high_poor_or_fair_health_rate,0,0,0.401,0,0.401
-24045,Wicomico,64.0,external_proxy,high_poor_or_fair_health_rate,1,1,0.907,1,0.907
-24047,Worcester,52.5,external_proxy,high_poor_or_fair_health_rate,0,0,0.12,0,0.12
+24001,Allegany,64.1,independent_external,high_hrsa_provider_shortage_burden,0,0,0.09,0,0.09
+24003,Anne Arundel,32.5,independent_external,high_hrsa_provider_shortage_burden,0,0,0.156,0,0.156
+24510,Baltimore City,70.0,independent_external,high_hrsa_provider_shortage_burden,1,1,0.987,1,0.987
+24005,Baltimore County,42.3,independent_external,high_hrsa_provider_shortage_burden,0,0,0.474,0,0.474
+24009,Calvert,27.2,independent_external,high_hrsa_provider_shortage_burden,0,0,0.014,0,0.014
+24011,Caroline,71.1,independent_external,high_hrsa_provider_shortage_burden,1,1,0.553,1,0.553
+24013,Carroll,30.2,independent_external,high_hrsa_provider_shortage_burden,0,0,0.018,0,0.018
+24015,Cecil,51.9,independent_external,high_hrsa_provider_shortage_burden,0,0,0.056,0,0.056
+24017,Charles,40.8,independent_external,high_hrsa_provider_shortage_burden,0,0,0.064,0,0.064
+24019,Dorchester,75.8,independent_external,high_hrsa_provider_shortage_burden,0,0,0.26,0,0.26
+24021,Frederick,34.9,independent_external,high_hrsa_provider_shortage_burden,0,0,0.15,0,0.15
+24023,Garrett,63.7,independent_external,high_hrsa_provider_shortage_burden,0,0,0.103,0,0.103
+24025,Harford,35.4,independent_external,high_hrsa_provider_shortage_burden,0,0,0.052,0,0.052
+24027,Howard,12.5,independent_external,high_hrsa_provider_shortage_burden,0,0,0.063,0,0.063
+24029,Kent,48.6,independent_external,high_hrsa_provider_shortage_burden,0,0,0.046,0,0.046
+24031,Montgomery,35.0,independent_external,high_hrsa_provider_shortage_burden,1,1,0.842,1,0.842
+24033,Prince George's,65.8,independent_external,high_hrsa_provider_shortage_burden,1,1,0.984,1,0.984
+24035,Queen Anne's,40.2,independent_external,high_hrsa_provider_shortage_burden,0,0,0.093,0,0.093
+24039,Somerset,69.1,independent_external,high_hrsa_provider_shortage_burden,0,0,0.15,0,0.15
+24037,St. Mary's,36.9,independent_external,high_hrsa_provider_shortage_burden,0,0,0.081,0,0.081
+24041,Talbot,38.4,independent_external,high_hrsa_provider_shortage_burden,0,0,0.015,0,0.015
+24043,Washington,60.4,independent_external,high_hrsa_provider_shortage_burden,1,0,0.433,0,0.433
+24045,Wicomico,56.3,independent_external,high_hrsa_provider_shortage_burden,1,1,0.744,1,0.744
+24047,Worcester,51.4,independent_external,high_hrsa_provider_shortage_burden,0,0,0.036,0,0.036

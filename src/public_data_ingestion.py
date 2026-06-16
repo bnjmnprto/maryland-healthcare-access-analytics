@@ -1,10 +1,9 @@
-"""Build a raw Maryland county file from public sources where feasible.
+"""Legacy helper for building a public-data raw CSV.
 
-The default project pipeline uses the bundled sample file so tests and demos are
-stable without network access. This module provides an optional live-data path
-that pulls public county-level indicators from CDC PLACES, HRSA HPSA downloads,
-and CMS Provider Data, then fills fields not available from those feeds with the
-documented sample fallback values.
+The main project pipeline now uses source-specific fetchers by default:
+`fetch_acs.py`, `fetch_cdc_places.py`, `fetch_hrsa_hpsa.py`, and
+`fetch_cms_hospital_quality.py`. This module is retained for backward-compatible
+tests and as a simple example of a single-file public-data fallback workflow.
 """
 
 from __future__ import annotations

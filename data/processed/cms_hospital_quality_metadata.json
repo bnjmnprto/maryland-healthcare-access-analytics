@@ -1,0 +1,15 @@
+{
+  "source_name": "CMS Provider Data: Hospital General Information",
+  "access_url": "https://data.cms.gov/provider-data/dataset/xubh-q36u",
+  "api_url_template": "https://data.cms.gov/provider-data/api/1/datastore/query/xubh-q36u/0?limit=1000&offset={offset}",
+  "date_accessed": "2026-06-16",
+  "rows": 24,
+  "status": "loaded",
+  "variables": {
+    "hospital_count": "CMS hospital facility count by county",
+    "acute_care_hospitals": "CMS acute care hospital count by county",
+    "emergency_services_count": "Hospitals reporting emergency services = Yes",
+    "avg_hospital_star_rating": "Average numeric CMS overall hospital rating by county"
+  },
+  "notes": "The CMS General Information file does not include hospital beds or a county-level readmission rate, so those exact fields remain documented fallback inputs."
+}

@@ -1,0 +1,23 @@
+{
+  "source_name": "U.S. Census ACS 5-year via Census Reporter API",
+  "access_url": "https://api.censusreporter.org/1.0/data/show/latest?table_ids=B01003,B17001,B19013,B27010,B01001,B18101,B08201,B28002&geo_ids=050|04000US24",
+  "release": {
+    "id": "acs2024_5yr",
+    "name": "ACS 2024 5-year",
+    "years": "2020-2024"
+  },
+  "date_accessed": "2026-06-16",
+  "rows": 24,
+  "variables": {
+    "population": "ACS B01003 total population",
+    "poverty_pct": "ACS B17001 population below poverty / poverty universe",
+    "median_household_income": "ACS B19013 median household income",
+    "uninsured_pct": "ACS B27010 no health insurance coverage / coverage universe",
+    "age_65_plus_pct": "ACS B01001 population age 65+ / total population",
+    "disability_pct": "ACS B18101 population with a disability / civilian noninstitutionalized population",
+    "transportation_access_proxy": "ACS B08201 households with no vehicle available / households",
+    "internet_access_gap_pct": "ACS B28002 households with no internet access / households"
+  },
+  "status": "loaded",
+  "notes": "Census Reporter exposes ACS estimates without requiring a Census API key. For production, teams may swap in direct api.census.gov calls with an API key."
+}

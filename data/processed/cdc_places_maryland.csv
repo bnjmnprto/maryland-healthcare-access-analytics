@@ -1,0 +1,25 @@
+county_fips,county_name,source_year,date_accessed,places_population,poor_or_fair_health_pct,diabetes_pct,high_blood_pressure_pct,obesity_pct,smoking_pct,frequent_physical_distress_pct,routine_checkup_pct,places_uninsured_pct,source_cdc_places
+24001,Allegany,CDC PLACES county release,2026-06-16,67273.0,22.7,13.3,39.6,36.6,17.7,15.5,79.7,9.4,real_public_data
+24003,Anne Arundel,CDC PLACES county release,2026-06-16,594582.0,16.1,10.4,34.5,34.5,10.6,11.7,79.6,7.1,real_public_data
+24510,Baltimore,CDC PLACES county release,2026-06-16,565239.0,23.0,14.4,40.6,38.7,15.8,13.8,80.4,10.1,real_public_data
+24005,Baltimore,CDC PLACES county release,2026-06-16,844703.0,18.2,13.1,36.7,34.0,11.1,11.7,80.3,8.1,real_public_data
+24009,Calvert,CDC PLACES county release,2026-06-16,94728.0,15.9,10.9,36.9,36.3,11.1,11.9,79.4,6.5,real_public_data
+24011,Caroline,CDC PLACES county release,2026-06-16,33593.0,22.3,14.2,41.3,41.7,17.4,15.3,78.7,10.6,real_public_data
+24013,Carroll,CDC PLACES county release,2026-06-16,176639.0,14.4,10.3,34.4,37.7,10.9,11.4,76.2,6.3,real_public_data
+24015,Cecil,CDC PLACES county release,2026-06-16,105672.0,19.6,13.2,39.2,41.3,15.3,14.0,77.4,8.0,real_public_data
+24017,Charles,CDC PLACES county release,2026-06-16,171973.0,17.5,13.4,41.4,41.9,11.5,11.8,81.1,7.5,real_public_data
+24019,Dorchester,CDC PLACES county release,2026-06-16,32879.0,24.1,16.6,44.2,41.8,16.1,16.3,81.8,10.1,real_public_data
+24021,Frederick,CDC PLACES county release,2026-06-16,293391.0,14.7,10.6,33.9,34.7,9.2,10.5,78.7,7.7,real_public_data
+24023,Garrett,CDC PLACES county release,2026-06-16,28423.0,21.0,14.1,42.4,36.3,14.2,15.0,80.0,7.9,real_public_data
+24025,Harford,CDC PLACES county release,2026-06-16,264644.0,15.9,11.6,35.9,35.8,10.9,12.1,79.7,6.8,real_public_data
+24027,Howard,CDC PLACES county release,2026-06-16,336001.0,12.4,10.4,34.5,30.0,7.4,9.5,80.8,5.7,real_public_data
+24029,Kent,CDC PLACES county release,2026-06-16,19303.0,19.0,13.7,43.0,35.1,11.9,13.3,80.8,7.9,real_public_data
+24031,Montgomery,CDC PLACES county release,2026-06-16,1058474.0,15.4,10.8,32.7,26.1,7.2,10.5,77.5,8.7,real_public_data
+24033,Prince George's,CDC PLACES county release,2026-06-16,947430.0,20.9,15.2,40.0,42.2,10.5,12.6,78.2,12.5,real_public_data
+24035,Queen Anne's,CDC PLACES county release,2026-06-16,52508.0,16.2,11.6,38.4,29.4,11.7,12.4,77.8,6.7,real_public_data
+24039,Somerset,CDC PLACES county release,2026-06-16,24910.0,23.8,14.2,42.7,38.4,16.9,14.9,79.6,10.9,real_public_data
+24037,St. Mary's,CDC PLACES county release,2026-06-16,115281.0,17.1,11.4,34.7,37.4,12.7,11.9,77.5,7.6,real_public_data
+24041,Talbot,CDC PLACES county release,2026-06-16,37823.0,18.4,13.1,41.6,30.1,10.9,13.6,82.8,7.7,real_public_data
+24043,Washington,CDC PLACES county release,2026-06-16,155813.0,20.5,13.3,38.9,39.0,15.1,14.3,79.5,9.4,real_public_data
+24045,Wicomico,CDC PLACES county release,2026-06-16,104800.0,20.7,12.6,36.7,39.6,13.4,13.1,81.0,9.1,real_public_data
+24047,Worcester,CDC PLACES county release,2026-06-16,54171.0,18.3,13.7,42.1,33.1,12.3,13.9,83.1,7.1,real_public_data

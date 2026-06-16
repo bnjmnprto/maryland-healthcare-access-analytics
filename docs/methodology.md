@@ -2,99 +2,132 @@
 
 ## Project Framing
 
-This project estimates county-level healthcare access risk across Maryland using indicators that are commonly available from public datasets. The committed workflow uses a stable sample dataset by default and includes optional live ingestion for selected CDC PLACES, HRSA HPSA, and CMS Provider Data fields. The goal is not to diagnose patients or replace local public-health judgment. The goal is to show how an analyst can combine demographic, access, facility, and outcome signals into a transparent prioritization workflow.
+Maryland Healthcare Access Analytics is a county-level public-health analytics workflow. The default pipeline attempts real public data first and uses a documented sample fallback only where a public feed does not provide the required field or is unavailable. The current committed run is `mixed_real_and_demo_data`: ACS, CDC PLACES, HRSA HPSA, and CMS Hospital General Information loaded successfully, while selected reference fields remain fallback values.
 
-## Why These Four Risk Components Were Chosen
+The score is a transparent prioritization index. It is not clinically validated and should not be used for diagnosis, treatment, eligibility, denial of care, or automated resource allocation.
 
-### Provider Access Gap
+## Why These Five Risk Components Were Chosen
 
-Provider availability is central to healthcare access. A county with fewer primary care, mental health, or dental providers may face longer appointment wait times, more travel burden, and fewer preventive-care touchpoints. HRSA shortage-area style scores add a public-health planning signal beyond simple provider counts.
+### Socioeconomic Vulnerability
 
-### Socioeconomic Need
+Variables: poverty rate, median household income, age 65+ percentage, disability percentage.
 
-Healthcare access is strongly shaped by affordability and social context. Poverty and uninsured rates can limit preventive care, medication adherence, and timely follow-up. Median household income is included inversely because lower income can indicate financial barriers. Older adult share is included because aging populations often have higher care coordination and transportation needs.
+Source: ACS for poverty, income, age, and disability in the current run.
+
+Directionality: higher poverty, older adult share, and disability increase risk; lower median household income increases risk.
+
+Weight in final score: 25%.
+
+Rationale: affordability, disability access, aging, and income constraints can shape whether residents can obtain timely care.
+
+### Insurance And Access Burden
+
+Variables: uninsured percentage, no-vehicle household percentage, no-internet household percentage.
+
+Source: ACS.
+
+Directionality: higher uninsured, no-vehicle, and no-internet percentages increase risk.
+
+Weight in final score: 20%.
+
+Rationale: insurance coverage, transportation, and digital access are practical barriers to appointment scheduling, telehealth, follow-up, and routine care.
 
 ### Chronic Disease Burden
 
-High chronic disease prevalence can indicate greater demand for ongoing care. Diabetes, obesity, hypertension, poor/fair health, and preventable hospital stays are included because they connect access, prevention, and health system strain.
+Variables: diabetes, obesity, high blood pressure, poor/fair health, current smoking, frequent physical distress.
 
-### Hospital Quality and Capacity Gap
+Source: CDC PLACES.
 
-Hospitals are not the whole access story, but they matter when counties have limited acute-care capacity, higher readmission rates, or lower facility quality ratings. This component is weighted lower than provider access and chronic burden because hospital measures are less direct proxies for everyday primary and preventive care access.
+Directionality: higher values increase risk.
 
-## How Min-Max Scaling Works
+Weight in final score: 25%.
 
-The pipeline uses min-max scaling to place indicators with different units on a common 0-100 scale:
+Rationale: chronic disease prevalence can indicate higher demand for preventive, primary, and ongoing care.
+
+### Provider Shortage Burden
+
+Variables: HRSA primary care HPSA score/count, mental health HPSA score/count, dental HPSA score/count, and fallback provider rates per 100,000 residents.
+
+Source: HRSA HPSA public downloads plus documented provider-rate fallback fields.
+
+Directionality: higher HPSA scores/counts increase risk; lower provider rates increase risk.
+
+Weight in final score: 20%.
+
+Rationale: formal shortage-area designations are strong public-health planning signals for access constraints.
+
+### Hospital Availability/Quality Burden
+
+Variables: CMS hospital count, acute-care count, emergency services count, average hospital rating, fallback hospital beds, and readmission proxy.
+
+Source: CMS Hospital General Information plus documented fallback fields for beds/readmission.
+
+Directionality: lower hospital availability/rating increases risk; higher readmission proxy increases risk.
+
+Weight in final score: 10%.
+
+Rationale: hospitals are not the only access channel, but acute-care availability and quality context are relevant to county-level access planning.
+
+## Normalization
+
+The pipeline uses min-max scaling to convert indicators with different units into a common 0-100 scale:
 
 ```text
 scaled_value = ((county_value - minimum_county_value) / (maximum_county_value - minimum_county_value)) * 100
 ```
 
-For measures where higher raw values are better, such as provider supply or hospital star rating, the project inverts the scaled value:
+For measures where higher raw values are better, such as hospital rating or provider supply, the scaled value is inverted:
 
 ```text
 inverted_scaled_value = 100 - scaled_value
 ```
 
-This makes the component scores easier to read: higher component values consistently mean more risk or greater need.
+After transformation, higher component values consistently mean higher access-related risk or burden.
 
-Min-max scaling is easy to explain and beginner-friendly, but it has limitations. It depends on the range of counties included in the dataset, can be sensitive to outliers, and does not prove that a county is clinically unsafe or underserved. In a production version, the team should test alternative scaling methods, uncertainty intervals, and benchmarks against state or national reference values.
+Limitations: min-max scaling is sensitive to the set of counties and to outliers. It produces a relative Maryland comparison, not an absolute national benchmark.
 
-## Why These Weights Were Selected
+## Score Formula
 
-The current access risk score uses:
+```text
+access_risk_score =
+    socioeconomic_need_index * 0.25
+  + insurance_access_burden_index * 0.20
+  + chronic_burden_index * 0.25
+  + provider_gap_index * 0.20
+  + hospital_quality_gap_index * 0.10
+```
 
-- 35% provider access gap
-- 25% socioeconomic need
-- 25% chronic disease burden
-- 15% hospital quality and capacity gap
+These weights are transparent assumptions. They are chosen to balance affordability/social vulnerability, practical access barriers, chronic disease demand, provider shortage, and hospital context. A production version should review weights with public-health leaders, community stakeholders, clinicians, and healthcare operations teams.
 
-Provider access receives the highest weight because the project is specifically focused on healthcare access risk, not overall population health ranking. Socioeconomic need and chronic burden receive equal weights because both affordability barriers and care demand can drive poor access outcomes. Hospital quality/capacity receives a smaller but meaningful weight because facility context matters, but it is less directly tied to routine outpatient access than provider availability.
+## Machine Learning Target
 
-These weights are transparent assumptions, not validated policy weights. They are intentionally easy to change in `src/data_pipeline.py`. A production version should review weights with public-health leaders, community stakeholders, clinicians, and healthcare operations teams.
+The model target hierarchy is:
 
-## ML Target Modes
+1. HRSA provider shortage burden, when available
+2. High poor/fair health rate from CDC PLACES
+3. High uninsured rate from ACS
+4. Demo rule-derived access-risk target as last fallback
 
-The model script supports two target modes.
+The current default target is `high_hrsa_provider_shortage_burden`, with target mode `independent_external`. It labels counties in the top quartile of a HRSA HPSA score/count burden index. HPSA-derived predictor fields are excluded from the model inputs when this target is used.
 
-The default mode is `external_proxy`. It labels counties in the top quartile of `poor_or_fair_health_pct` as `high_poor_or_fair_health_rate`. This target is not derived from the project’s access risk score, so it is more credible than only predicting a score-derived label. However, the current values are still part of the demonstration dataset, so this should be treated as a sample workflow rather than validated predictive modeling.
-
-The optional mode is `demo_score`. It uses `high_access_risk`, a label derived from the project’s own access risk score. This mode is useful for showing ML workflow mechanics, but it is explicitly demonstration-only.
-
-The modeling layer is acceptable for a portfolio demonstration because it shows:
-
-- Train/test split workflow
-- Logistic regression and random forest modeling
-- Model evaluation metrics
-- Feature importance and coefficient interpretation
-- Dashboard integration of model outputs
-
-It should not be interpreted as validated predictive performance. Perfect or near-perfect metrics can happen with a small dataset and should be treated as a workflow signal, not deployment evidence.
+This target is stronger than a score-derived demo label because it comes from an external public source, but it is still a county-level proxy. It is not a validated outcome.
 
 ## Future Validated Outcome
 
-A future production version should train and validate against an external outcome that was not created by the project score. Stronger candidate outcomes include:
+A future production model should validate against an observed external outcome not constructed inside this project, such as:
 
-- Avoidable emergency department visit rates
-- Preventable hospitalization rates
-- Ambulatory care sensitive condition admissions
-- Appointment wait-time measures
+- Avoidable emergency department visits
+- Preventable hospitalizations
+- Ambulatory care sensitive admissions
+- Appointment wait times
 - Unmet care due to cost
-- Primary care visit rates or delayed care survey measures
-- County-level preventable hospital stays from an official source
-
-The strongest near-term validation target would be an independently sourced measure of preventable hospitalizations or avoidable emergency department utilization, ideally stratified by year and county. That would test whether the score and model identify counties with measurable access-related utilization burden.
+- Preventable hospital stays from an official public source
 
 ## Ethical Limitations
 
-This project should not be used as a clinical decision tool, benefits eligibility tool, or automated resource denial tool. It operates at the county level and cannot represent individual patients, households, neighborhoods, or provider networks.
-
-Important limitations:
-
+- No patient-level data is used.
 - County averages can hide neighborhood-level inequities.
-- Rural travel time, language access, disability access, broadband access, and appointment availability are not fully captured.
-- Race/ethnicity-style demographic measures should be used only for equity review, not as causal explanations or individual-level predictors.
-- The sample dataset is illustrative and should be replaced before operational use.
-- A risk score can guide questions and prioritization, but it cannot determine why access barriers exist without local context.
-
-Responsible production use would require official source refreshes, data quality checks, stakeholder review, equity impact review, uncertainty analysis, and clear communication that the dashboard supports planning rather than clinical judgment.
+- Demographic fields should be used for descriptive equity review, not causal claims.
+- Fallback fields must be replaced or reviewed before operational use.
+- Perfect or near-perfect metrics can occur with small county-level datasets and should not be interpreted as validated predictive performance.
+- The dashboard is a planning and communication artifact, not a clinical, eligibility, or resource-denial tool.

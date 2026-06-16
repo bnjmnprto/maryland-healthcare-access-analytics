@@ -1,44 +1,48 @@
 # Data Provenance
 
-## Current Default Dataset
+## Current Default Run
 
-The repository defaults to `data/raw/maryland_county_health_access_sample.csv`. This file is a curated demonstration dataset with one row for each Maryland county or county-equivalent jurisdiction, including Baltimore City. It exists so reviewers can run the full project without credentials, paid services, large downloads, or network access.
+The current committed run is recorded in `data/processed/run_metadata.json`. At publication time, the run mode is `mixed_real_and_demo_data`: public ACS, CDC PLACES, HRSA HPSA, and CMS Hospital General Information sources loaded successfully, while selected fields remain documented sample fallbacks.
 
-The sample structure mirrors public county-level sources, but the included values should not be treated as official public-health findings.
+No patient-level data is used.
 
-## Optional Live Public-Data Ingestion
+## Source Details
 
-The optional script `src/public_data_ingestion.py` can build a pipeline-compatible raw CSV using public sources where fields are available:
+| Source | Access URL or endpoint | Variables used | Transformation | Current status |
+|---|---|---|---|---|
+| U.S. Census ACS 5-year via Census Reporter API | `https://api.censusreporter.org/1.0/data/show/latest?table_ids=B01003,B17001,B19013,B27010,B01001,B18101,B08201,B28002&geo_ids=050|04000US24` | population, poverty, median income, uninsured, age 65+, disability, no vehicle, no internet | Detailed ACS counts are converted to county percentages and joined by FIPS | Used in current run |
+| CDC PLACES county API | `https://data.cdc.gov/resource/i46a-9kgh.json?$limit=5000&stateabbr=MD` | poor/fair health, diabetes, high blood pressure, obesity, smoking, physical distress, checkup, access proxy | County records are filtered to Maryland and renamed to project feature columns | Used in current run |
+| HRSA HPSA downloads | `BCD_HPSA_FCT_DET_PC.csv`, `BCD_HPSA_FCT_DET_MH.csv`, `BCD_HPSA_FCT_DET_DH.csv` from `https://data.hrsa.gov/DataDownload/DD_Files/` | HPSA score, designated record counts, primary/mental/dental status | Active designated records are filtered to Maryland and aggregated to county FIPS | Used in current run |
+| CMS Hospital General Information | `https://data.cms.gov/provider-data/dataset/xubh-q36u` | hospital count, acute-care count, emergency services count, overall rating | Maryland facilities are aggregated to county using county names and FIPS lookup | Used in current run |
+| Maryland county GeoJSON | `data/raw/maryland_counties.geojson` | county geometries | FIPS fields are normalized for Plotly map joins | Used in dashboard |
+| Bundled sample fallback | `data/raw/maryland_county_health_access_sample.csv` | region, rural flag, nonwhite percentage, provider workforce rates, beds, readmission proxy, preventable stays, life expectancy | Used only for fields not provided by current public feeds | Fallback fields in current run |
 
-```bash
-make live-data
-make live-pipeline
-```
+## Access Dates
 
-The script writes:
+Access dates are written by each fetcher and summarized in `data/processed/run_metadata.json`.
 
-- `data/raw/maryland_county_health_access_public.csv`
-- `data/raw/public_data_provenance.json`
+Processed source extracts:
 
-Those generated files are intentionally ignored by git because they depend on live source availability and fetch date.
+- `data/processed/acs_county_demographics.csv`
+- `data/processed/cdc_places_maryland.csv`
+- `data/processed/hrsa_hpsa_maryland.csv`
+- `data/processed/cms_hospital_quality_maryland.csv`
 
-## Source Coverage
+Raw or filtered raw source extracts:
 
-| Source | Fields used where feasible | Notes |
-|---|---|---|
-| CDC PLACES county data | Population, uninsured rate, diabetes, obesity, hypertension, poor/fair health proxy | Official public county-level health indicators. |
-| HRSA HPSA primary care download | Primary care shortage score | Uses active designated Maryland HPSA records. |
-| HRSA HPSA mental health download | Mental health shortage score | Uses active designated Maryland HPSA records. |
-| CMS Hospital General Information | Hospital count, average hospital star rating | Aggregates Maryland hospital records to county level. |
-| Maryland Open Data County Boundaries | County geometry | Used for the dashboard choropleth map. |
-| Bundled sample fallback | Demographics, provider supply, dental access, hospital beds, readmissions, life expectancy, and any missing live fields | Keeps the project runnable and schema-complete. |
+- `data/raw/acs/`
+- `data/raw/cdc_places/`
+- `data/raw/hrsa_hpsa/`
+- `data/raw/cms_hospital_quality/`
 
-## Why Some Fields Still Use Fallback Values
+## Known Limitations
 
-The dashboard schema includes features that are not all available in a single public feed with identical county coverage and refresh timing. For example, median household income, poverty, age structure, provider rates, dental provider supply, hospital beds, readmission rates, and life expectancy should ideally come from ACS, County Health Rankings, CMS quality files, state facility sources, or workforce data.
-
-The optional live ingestion script therefore uses public data where feasible and clearly marks remaining fields as sample fallback. A production version should replace those fallback fields with official extracts and preserve source table IDs, extract dates, and refresh logic.
+- ACS is accessed through Census Reporter’s public API because direct `api.census.gov` calls may require an API key in some environments.
+- CMS Hospital General Information does not provide hospital beds or a true county readmission rate, so those fields remain documented fallback values.
+- Provider workforce rates are fallback fields until an official county-level workforce source is integrated.
+- County-level indicators can hide sub-county access barriers.
+- Source years and release timing may differ across ACS, CDC, HRSA, and CMS.
 
 ## Responsible-Use Boundary
 
-This project uses aggregate county-level data only. It does not use patient-level data and should not be used for diagnosis, treatment, eligibility decisions, funding denial, or automated clinical triage.
+This project uses aggregate county-level public data and sample fallback fields. It should not be used for diagnosis, treatment, individual eligibility, service denial, or automated resource allocation. Any operational version would require official source refresh governance, uncertainty analysis, equity review, and stakeholder sign-off.

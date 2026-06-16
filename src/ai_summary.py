@@ -18,6 +18,7 @@ SUMMARY_PATH = PROCESSED_DIR / "county_ai_summaries.csv"
 DRIVER_LABELS = {
     "provider_gap_index": "provider access constraints",
     "socioeconomic_need_index": "socioeconomic need",
+    "insurance_access_burden_index": "insurance and transportation access barriers",
     "chronic_burden_index": "chronic disease burden",
     "hospital_quality_gap_index": "hospital quality and capacity gaps",
 }
@@ -48,16 +49,18 @@ def generate_template_summary(row: pd.Series, state_average: pd.Series) -> str:
     poverty_delta = row["poverty_pct"] - state_average["poverty_pct"]
     uninsured_delta = row["uninsured_pct"] - state_average["uninsured_pct"]
     diabetes_delta = row["diabetes_pct"] - state_average["diabetes_pct"]
+    data_mode = str(row.get("data_mode", "unknown data mode")).replace("_", " ")
 
     return (
         f"{row['county_name']} is classified as {row['access_risk_tier'].lower()} access risk "
         f"with a score of {row['access_risk_score']:.1f}, which is "
         f"{_format_delta(risk_delta, 'risk-score points')} the Maryland county average. "
-        f"The leading risk drivers are {drivers[0]} and {drivers[1]}. "
+        f"This run is in {data_mode} mode. The leading risk drivers are {drivers[0]} and {drivers[1]}. "
         f"Poverty is {_format_delta(poverty_delta)} the county average, uninsured rate is "
         f"{_format_delta(uninsured_delta)}, and diabetes prevalence is "
         f"{_format_delta(diabetes_delta)}. This summary is intended to support prioritization "
-        f"and should be reviewed alongside local context, community input, and updated source data."
+        f"and should be reviewed alongside local context, community input, and updated source data. "
+        f"It is not medical advice or a basis for individual eligibility decisions."
     )
 
 

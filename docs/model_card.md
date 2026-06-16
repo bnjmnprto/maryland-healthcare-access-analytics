@@ -2,106 +2,95 @@
 
 ## Model Purpose
 
-The model demonstrates a beginner-friendly healthcare analytics machine learning workflow for identifying Maryland counties with elevated access-related risk signals. It is part of a portfolio simulation and is intended to show reproducible feature engineering, model training, evaluation, interpretation, and dashboard integration.
+The model demonstrates a reproducible healthcare analytics machine learning workflow for Maryland county-level access indicators. It is intended for employer portfolio review and technical communication, not operational deployment.
 
 ## Intended Use
 
-- Demonstrate a healthcare analytics modeling workflow.
-- Support portfolio review for Data Analyst, Healthcare Data Analyst, Junior Data Scientist, AI/Data Analyst, and Analytics Engineer-adjacent roles.
-- Help users understand which county-level features are associated with the selected target in the sample dataset.
-- Support planning conversations and deeper analysis, not operational decisions.
+- Demonstrate feature engineering, target selection, model training, evaluation, interpretation, and dashboard integration.
+- Support portfolio review for Healthcare Data Analyst, Data Analyst, Junior Data Scientist, Public Health Data Analyst, and AI/Data Analyst roles.
+- Explain associations between county-level features and the selected external/proxy target.
 
 ## Not Intended Use
 
 - Clinical diagnosis, treatment, triage, or patient-specific decision-making.
-- Eligibility decisions, funding denial, or automated resource allocation.
-- Validated public-health surveillance.
-- Real-world prediction without replacing the sample data and validating against official external outcomes.
+- Eligibility decisions, funding denial, service denial, or automated resource allocation.
+- Validated public-health surveillance or operational prediction.
 
 ## Data Sources
 
-The current model defaults to the project’s demonstration dataset in `data/raw/maryland_county_health_access_sample.csv`. The repository also includes `src/public_data_ingestion.py`, which can build an optional raw file from selected CDC PLACES, HRSA HPSA, and CMS Provider Data fields while retaining documented sample fallback values for missing feature groups.
+Current model inputs come from `data/processed/model_feature_table.csv`, built by `src/data_pipeline.py`.
 
-The fields are structured to mirror public county-level data sources such as:
+Current run status:
 
-- U.S. Census ACS county demographics
-- CDC PLACES chronic disease and health status indicators
-- HRSA HPSA/provider shortage data
-- CMS hospital quality or facility data
-- County Health Rankings
-- Maryland Open Data / Maryland Department of Health sources
+- ACS demographics: real public ACS estimates via Census Reporter API
+- CDC PLACES: real public county-level health indicators
+- HRSA HPSA: real public shortage-area downloads aggregated to county FIPS
+- CMS Hospital General Information: real public hospital facility data aggregated to county
+- Fallback fields: documented sample reference fields listed in `data/processed/run_metadata.json`
+
+No patient-level data is used.
 
 ## Features
 
-The model uses county-level demographic, access, provider, chronic disease, and hospital quality/capacity indicators. Example features include:
+Feature groups include:
 
-- Poverty rate
-- Uninsured rate
-- Older adult share
-- Primary care physicians per 100,000 residents
-- Mental health providers per 100,000 residents
-- Dental providers per 100,000 residents
-- HRSA-style primary care and mental health shortage scores
-- Diabetes, obesity, and hypertension prevalence
-- Preventable hospital stays
-- Average hospital star rating
-- Readmission rate
+- ACS socioeconomic and access features: poverty, income, uninsured, age 65+, disability, no vehicle, no internet
+- CDC PLACES health features: diabetes, obesity, high blood pressure, poor/fair health, smoking, physical distress, checkup
+- HRSA shortage features: HPSA scores, counts, and designation flags
+- CMS hospital features: hospital count, acute-care count, emergency services count, average hospital rating
+- Engineered component indices: socioeconomic need, insurance/access burden, chronic burden, and hospital burden
 
-When the default external-proxy target is used, `poor_or_fair_health_pct` is excluded from the model inputs because it is used to construct the target.
+When the HRSA target is used, HPSA-derived provider features are excluded from predictors to avoid a circular target.
 
 ## Target Variable
 
-The default target mode is `external_proxy`.
+Default target mode: `independent_external`
 
-**Default target:** `high_poor_or_fair_health_rate`
+Default target: `high_hrsa_provider_shortage_burden`
 
-This target labels counties in the top quartile of `poor_or_fair_health_pct`. It is not derived from the project’s access risk score, so it is a stronger demonstration target than the original score-derived label. However, the current values are still sample portfolio data, so this is not validated predictive modeling.
+Definition: counties in the top quartile of a HRSA HPSA score/count burden index.
 
-The script also supports `demo_score` mode.
+Fallback target hierarchy:
 
-**Demo target:** `high_access_risk`
+1. HRSA provider shortage burden
+2. CDC PLACES high poor/fair health rate
+3. ACS high uninsured rate
+4. Demo rule-derived high access-risk label
 
-This label is derived from the top quartile of the project’s own access risk score. It is useful only for demonstrating ML workflow mechanics and should not be interpreted as independent validation.
+The demo rule-derived target is a last fallback only and is not independent validation.
+
+## Model Type
+
+- Logistic regression: selected default model for reproducibility and coefficient interpretation
+- Random forest: retained as a comparison model
+
+Model selection is deterministic. The selected model is intentionally fixed to logistic regression.
 
 ## Evaluation
 
-The model script trains:
-
-- Logistic regression
-- Random forest classifier
-
-Outputs include:
+Outputs:
 
 - `data/processed/model_metrics.json`
 - `data/processed/model_predictions.csv`
 - `data/processed/feature_importance.csv`
 - `data/processed/access_risk_model.joblib`
 
-Because the dataset has only 24 county rows, evaluation metrics should be treated as workflow checks rather than deployment evidence.
+Evaluation uses a fixed random state, stratified train/test split when feasible, and small-sample cross-validation metadata. Because there are only 24 Maryland jurisdictions, metrics should be treated as workflow checks.
+
+Perfect or near-perfect metrics can occur with small county-level datasets and should not be interpreted as validated predictive performance.
 
 ## Limitations
 
-- The committed default data is illustrative sample data.
-- Optional live ingestion does not yet replace every field and should be reviewed through `docs/data_provenance.md`.
-- County-level data can hide neighborhood-level inequities.
-- The default target is an external-proxy target, not a validated operational outcome.
-- The model does not use patient-level data and cannot predict individual health outcomes.
-- The sample size is too small for robust model validation.
-- Production modeling would require multiple years of official public data and validation against an observed outcome.
+- The dataset is county-level and small.
+- Some features remain documented fallback fields.
+- The target is an external planning proxy, not an observed clinical or utilization outcome.
+- County-level indicators can hide neighborhood-level inequities.
+- The model cannot predict individual health outcomes.
 
 ## Fairness And Ethics
 
-The project avoids patient-level data and does not make individual predictions. Demographic fields should be used for descriptive equity review, not for denying services or making assumptions about individual patients.
-
-A production version should include:
-
-- Equity impact review
-- Stakeholder review
-- Sub-county analysis where available
-- Transparent data lineage
-- Uncertainty and sensitivity checks
-- Governance around any LLM-generated narrative
+A production version should include equity review, sub-county analysis where available, uncertainty checks, stakeholder review, and transparent data lineage. Demographic indicators should not be used to deny care or infer individual risk.
 
 ## Healthcare Responsible-Use Warning
 
-This model is not a clinical decision tool. It should not be used to diagnose, treat, triage, or determine individual eligibility. It is a portfolio demonstration of county-level healthcare analytics and should be interpreted only as a planning and communication workflow.
+This model is not a clinical decision tool. It should not be used to diagnose, treat, triage, determine eligibility, deny services, or allocate resources automatically. It is a portfolio demonstration of county-level healthcare analytics.

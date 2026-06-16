@@ -5,8 +5,8 @@ Before publishing the project on GitHub, LinkedIn, or a portfolio website, captu
 ## Required Screenshots
 
 1. `docs/images/dashboard_overview.png`
-   - Show the Overview tab with headline metrics and the Maryland county choropleth risk map.
-   - If space allows, include the top of the risk ranking chart below the map.
+   - Show the Overview tab with headline metrics, data mode, source coverage, and jurisdiction coverage.
+   - If space allows, include the top of the risk ranking chart below the data-mode section.
    - Use the default filters so all counties are visible.
 
 2. `docs/images/risk_ranking.png`
@@ -23,6 +23,13 @@ Before publishing the project on GitHub, LinkedIn, or a portfolio website, captu
 5. `docs/images/responsible_use.png`
    - Show the Responsible Use tab.
    - This is useful for healthcare employers because it demonstrates awareness of ethical and operational limits.
+
+6. `docs/images/data_sources_quality.png`
+   - Show the Data Sources / Data Quality tab with data mode, source coverage, fallback fields, and source-status table.
+
+7. `docs/images/map.png`
+   - Show the dedicated Map tab with the Maryland county choropleth.
+   - Hover details should include county name, risk score, risk tier, and top risk factor when interacting with the dashboard.
 
 ## Optional Screenshot
 
@@ -45,7 +52,9 @@ The README includes image references for:
 - `docs/images/dashboard_overview.png`
 - `docs/images/risk_ranking.png`
 - `docs/images/county_comparison.png`
+- `docs/images/map.png`
 - `docs/images/model_results.png`
+- `docs/images/data_sources_quality.png`
 - `docs/images/responsible_use.png`
 
 These files should contain real Streamlit screenshots before publishing.

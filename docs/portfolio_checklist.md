@@ -37,7 +37,7 @@ Use this checklist before publishing the project on GitHub, LinkedIn, a portfoli
 - [ ] Data dictionary is complete.
 - [ ] Methodology explains risk components, scaling, weights, and limitations.
 - [ ] Executive summary reads like a professional public-health analytics brief.
-- [ ] Future real-data upgrade plan lists official public sources.
+- [ ] Data source docs identify real public sources and fallback fields.
 - [ ] Screenshot guide is up to date.
 - [ ] Interview talking points are ready for employer conversations.
 
@@ -46,7 +46,7 @@ Use this checklist before publishing the project on GitHub, LinkedIn, a portfoli
 - [ ] Model caveat is visible in `model_metrics.json`.
 - [ ] Model caveat is visible in the dashboard.
 - [ ] README states that this is not a clinical decision tool.
-- [ ] README states that findings come from a demonstration dataset.
+- [ ] README states the current `mixed_real_and_demo_data` status honestly.
 - [ ] No claims imply validated public-health conclusions.
 
 ## Resume And Portfolio
@@ -55,12 +55,15 @@ Use this checklist before publishing the project on GitHub, LinkedIn, a portfoli
 - [ ] Role-specific bullet is selected for target job.
 - [ ] LinkedIn/GitHub portfolio description is added.
 - [ ] Screenshots are added to portfolio page.
-- [ ] Project is described as a healthcare analytics portfolio simulation.
+- [ ] Project is described as a real public-data analytics project with documented fallback fields.
 
 ## Final Pre-Publication Checklist
 
 - [ ] Screenshots are real.
 - [ ] Live dashboard link is updated or marked coming soon.
+- [ ] `data/processed/run_metadata.json` records data mode and source coverage.
+- [ ] ACS and CDC PLACES processed extracts are present.
+- [ ] HRSA and CMS status is documented as real or fallback.
 - [ ] `make all` passes.
 - [ ] `pytest` passes.
 - [ ] GitHub Actions badge works after push.

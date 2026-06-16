@@ -1,6 +1,6 @@
 # Maryland Healthcare Access Analytics
 
-[![Project Checks](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml/badge.svg?branch=ten-out-of-ten-upgrade)](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml)
+[![Project Checks](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml/badge.svg?branch=final-real-data-upgrade)](https://github.com/bnjmnprto/community-health-access-analytics/actions/workflows/project_checks.yml)
 
 A public-health analytics project using Python, SQL, SQLite, scikit-learn, Streamlit, and public county-level datasets to identify Maryland jurisdictions at elevated healthcare access risk.
 
@@ -15,77 +15,65 @@ This link should be updated after Streamlit Community Cloud deployment.
 
 ## 30-Second Employer Summary
 
-This project is a deployable healthcare analytics portfolio product. It cleans Maryland county-level data, supports optional public-data ingestion with sample fallback, builds a SQLite database, runs SQL analysis, engineers transparent access risk indicators, trains demonstration ML models with clear target-mode documentation, creates AI-style plain-English summaries, and presents everything in a Streamlit dashboard with tests, CI, deployment config, screenshots, model card, data quality report, and responsible-use caveats.
+This is an end-to-end healthcare analytics portfolio product for Maryland county-level access risk. The default pipeline now attempts real public data first, using ACS demographics, CDC PLACES health indicators, HRSA HPSA shortage data, and CMS hospital facility data when available. A documented sample fallback fills fields that those public feeds do not provide reliably, so the project remains reproducible.
 
-The current committed data is a portfolio simulation with optional public-data ingestion for selected fields. It does not use patient-level data and should not be interpreted as a validated clinical or public-health decision tool.
+The current committed run is `mixed_real_and_demo_data`: ACS, CDC PLACES, HRSA, and CMS loaded successfully, while several reference fields remain sample fallback values. The project uses aggregate county-level data only, not patient-level data.
 
 ## Employer Review Summary
 
 This project demonstrates an end-to-end healthcare analytics workflow: public-data ingestion, sample fallback handling, SQL database design, data validation, county-level risk scoring, machine learning workflow documentation, Streamlit dashboarding, choropleth mapping, AI-style summarization, model-card documentation, testing, CI, and executive communication.
 
-## What This Project Demonstrates
+## Current Data Mode
 
-- Python data cleaning and reproducible pipeline design
-- SQL schema design and SQLite querying
-- Healthcare analytics and public-health-style feature engineering
-- Maryland county choropleth mapping with graceful fallback
-- Machine learning workflow with external-proxy and demo target modes
-- Model output documentation through a model card
-- Streamlit dashboard design for stakeholder review
-- Template-based AI-style summarization without an API key
-- Responsible AI and healthcare analytics caveats
-- Data validation, pytest tests, Makefile commands, and GitHub Actions CI
-- Executive communication through a public-health analytics brief and case study
+The current data mode is recorded in `data/processed/run_metadata.json`.
 
-## Why This Matters For Healthcare Analytics
+- ACS: real public data via Census Reporter’s ACS API
+- CDC PLACES: real public county-level health indicators
+- HRSA HPSA: real public shortage-area downloads aggregated to county FIPS
+- CMS Hospital General Information: real public hospital facility data aggregated to county
+- Fallback fields: region, rural flag, nonwhite percentage, selected provider workforce rates, hospital beds, readmission proxy, preventable hospital stays, and life expectancy
 
-Healthcare access barriers often overlap. A county may show provider shortages, high poverty, high uninsured rates, chronic disease burden, limited hospital capacity, or several of those signals at once. A healthcare analyst needs to organize those signals into a clear workflow that supports prioritization and discussion without implying clinical certainty.
-
-This project shows how to move from raw county indicators to SQL tables, risk features, model outputs, map-based dashboarding, and executive-ready communication.
-
-## Responsible-Use Caveat
-
-This is a professional portfolio project with a default sample dataset and optional live public-data ingestion. The sample findings are not validated public-health conclusions. The dashboard supports analytics demonstration and planning conversations only. It should not be used for diagnosis, treatment, individual eligibility decisions, funding denial, or automated resource allocation.
-
-## Data Mode And Scope
-
-- Default mode uses the committed sample/demo dataset so the project is reproducible without network access.
-- Live-data mode can ingest selected public datasets from CDC PLACES, HRSA HPSA downloads, and CMS Provider Data, while retaining documented sample fallback values for fields not covered by those feeds.
-- The project does not use patient-level data.
-- The machine learning model is for workflow demonstration unless a production real-data mode is completed and validated against an official external outcome.
-- The dashboard is not a clinical, operational, eligibility, funding, or automated decision tool.
+The final feature table is `data/processed/healthcare_access_features.csv`.
 
 ## Why This Is Not A Clinical Decision Tool
 
-This project uses county-level aggregate indicators, not patient-level records. It does not diagnose disease, estimate individual risk, recommend treatment, or determine eligibility for care. The score is a transparent planning heuristic for portfolio demonstration, and any real-world public-health use would require official data lineage, stakeholder review, statistical validation, uncertainty analysis, and equity review.
+This project uses county-level aggregate indicators. It does not diagnose disease, estimate individual risk, recommend treatment, determine eligibility, deny services, or allocate resources automatically. The access risk score is a transparent prioritization index for portfolio demonstration and planning discussion only.
 
-## Dashboard Screenshots
+## Screenshots
 
 ![Risk ranking](docs/images/risk_ranking.png)
 
 ![County comparison](docs/images/county_comparison.png)
 
+![Map](docs/images/map.png)
+
 ![Model results](docs/images/model_results.png)
+
+![Data sources and quality](docs/images/data_sources_quality.png)
 
 ![Responsible use](docs/images/responsible_use.png)
 
 ## Architecture Overview
 
 ```text
-Sample or optional public raw data + Maryland county GeoJSON
+Public source fetchers + sample fallback scaffold
         |
         v
-src/public_data_ingestion.py (optional live-data path)
+src/fetch_acs.py
+src/fetch_cdc_places.py
+src/fetch_hrsa_hpsa.py
+src/fetch_cms_hospital_quality.py
         |
         v
 src/data_pipeline.py
         |
+        +--> data/processed/healthcare_access_features.csv
         +--> data/processed/dashboard_county_risk.csv
-        +--> data/processed/model_feature_table.csv
+        +--> data/processed/run_metadata.json
         +--> data/processed/maryland_healthcare_access.db
         |
         v
-src/validate_data.py ---> reports/data_quality_report.md
+src/validate_data.py ---> reports/data_quality_report.md + docs/validation_report.md
         |
         v
 src/risk_model.py -----> model metrics, predictions, feature importance
@@ -99,29 +87,42 @@ dashboard/app.py -----> Streamlit dashboard
 
 ## Data Pipeline
 
-`src/data_pipeline.py`:
-
-- Loads `data/raw/maryland_county_health_access_sample.csv`
-- Can also process `data/raw/maryland_county_health_access_public.csv` generated by `make live-data`
-- Validates required columns
-- Standardizes county FIPS codes
-- Creates four risk components:
-  - Provider access gap
-  - Socioeconomic need
-  - Chronic disease burden
-  - Hospital quality/capacity gap
-- Calculates `access_risk_score`
-- Adds `top_risk_factor` for dashboard and map tooltips
-- Writes processed CSVs and a SQLite database
-
-Optional public-data ingestion:
+Default command:
 
 ```bash
-make live-data
+python src/data_pipeline.py
+```
+
+The pipeline:
+
+- Attempts real public ACS, CDC PLACES, HRSA, and CMS source extracts
+- Uses cached processed public extracts when available to keep CI stable
+- Falls back only for source fields that are unavailable or if public fetches fail
+- Standardizes Maryland county FIPS codes
+- Confirms all 24 county-equivalent jurisdictions, including Baltimore City
+- Builds five risk components
+- Writes processed CSVs, a SQLite database, and `run_metadata.json`
+
+Refresh live public data:
+
+```bash
+make fetch-data
 make live-pipeline
 ```
 
-The live ingestion script pulls public data from CDC PLACES, HRSA HPSA downloads, and CMS Provider Data where feasible, then keeps documented sample fallback values for fields not covered by those feeds. Provenance is documented in [docs/data_provenance.md](docs/data_provenance.md) and [data/raw/source_manifest.json](data/raw/source_manifest.json).
+## Risk Score
+
+The access risk score is a transparent 0-100 index, not a validated medical or operational score.
+
+Components:
+
+- Socioeconomic vulnerability
+- Insurance and access burden
+- Chronic disease burden
+- Provider shortage burden
+- Hospital availability/quality burden
+
+Exact formulas and weights are documented in [docs/methodology.md](docs/methodology.md).
 
 ## SQL Layer
 
@@ -133,43 +134,37 @@ The SQLite database contains:
 - `provider_shortages`
 - `hospital_quality`
 - `access_risk_scores`
+- `source_status`
+- `final_feature_table`
+- `model_outputs`
 
 Run:
 
 ```bash
 sqlite3 data/processed/maryland_healthcare_access.db < sql/queries.sql
+sqlite3 data/processed/maryland_healthcare_access.db < sql/validation_queries.sql
 ```
 
-The SQL file answers:
-
-- Which counties have the highest access risk?
-- Which counties combine high poverty, high uninsured rates, and poor provider access?
-- Which counties have worse chronic disease burden?
-- How do counties compare to the Maryland average?
+SQL examples cover highest-risk jurisdictions, poverty and chronic burden, uninsured rates, provider shortage burden, weak hospital access, state-average comparisons, region-level risk components, and data completeness by source.
 
 ## ML Layer
 
-`src/risk_model.py` supports two target modes:
-
-**Default: `external_proxy`**
-
-- Target: `high_poor_or_fair_health_rate`
-- Source: top quartile of `poor_or_fair_health_pct`
-- Why it is stronger: it is not derived from the project’s access risk score.
-- Caveat: the current field is still sample portfolio data and must be replaced with official public data for production.
-
-**Optional: `demo_score`**
-
-- Target: `high_access_risk`
-- Source: top quartile of the project’s own access risk score
-- Use: demonstration-only workflow mode
-
-Run:
+Default command:
 
 ```bash
 python src/risk_model.py
-python src/risk_model.py --target-mode demo_score
 ```
+
+The model target hierarchy is:
+
+1. HRSA provider shortage burden, when available
+2. High poor/fair health rate from CDC PLACES
+3. High uninsured rate from ACS
+4. Demo rule-derived access-risk target as last fallback
+
+The current default target is `high_hrsa_provider_shortage_burden` with target mode `independent_external`. HPSA-derived predictor fields are excluded when this target is used to avoid circular modeling.
+
+Modeling caveat: Perfect or near-perfect metrics can occur with small county-level datasets and should not be interpreted as validated predictive performance.
 
 Model documentation: [docs/model_card.md](docs/model_card.md)
 
@@ -177,20 +172,20 @@ Model documentation: [docs/model_card.md](docs/model_card.md)
 
 The Streamlit dashboard includes:
 
-- Overview metrics
-- Maryland county choropleth map using `data/raw/maryland_counties.geojson`
-- Graceful map fallback to the risk ranking table
-- County risk ranking
-- County comparison tool
-- Model results and feature importance
-- Template-based AI-style county summary
+- Overview and current data mode
+- Maryland county risk ranking
+- County comparison
+- Maryland choropleth map with graceful fallback
+- Model results and feature interpretation
+- AI-style county summaries
+- Data Sources / Data Quality tab
 - Responsible-use section
 
 Map hover fields include county name, risk score, top risk factor, and risk category.
 
-## Responsible AI Section
+## Responsible AI
 
-`src/ai_summary.py` creates template-based summaries by default. It does not require an API key and does not send data to a paid API. Any future LLM integration should use only aggregate county-level metrics, avoid patient-level data, and go through organizational review.
+`src/ai_summary.py` creates template-based summaries by default. It does not require an API key and does not send data to a paid API. Summaries use only values in the final county feature table and include a responsible-use caveat.
 
 ## Testing And CI
 
@@ -206,27 +201,19 @@ Run tests only:
 pytest
 ```
 
-GitHub Actions workflow:
+GitHub Actions workflow: `.github/workflows/project_checks.yml`
 
-- `.github/workflows/project_checks.yml`
-
-The workflow installs dependencies, runs the data pipeline, validates data, trains the model, generates summaries, and runs pytest.
+CI installs dependencies, runs `make all`, then runs `pytest`. The pipeline uses committed/cached processed public extracts when available so CI is not fragile if a public endpoint is temporarily unavailable.
 
 ## Deployment Instructions
 
-### Streamlit Community Cloud
+Streamlit Community Cloud:
 
 1. Push this repository to GitHub.
-2. Go to [Streamlit Community Cloud](https://streamlit.io/cloud).
-3. Create a new app from the GitHub repository.
-4. Set the main file path to:
-
-```text
-dashboard/app.py
-```
-
-5. Confirm `requirements.txt` is in the repository root.
-6. Deploy.
+2. Create a new app in [Streamlit Community Cloud](https://streamlit.io/cloud).
+3. Set the main file path to `dashboard/app.py`.
+4. Confirm `requirements.txt` and `.streamlit/config.toml` are in the repository root.
+5. Deploy.
 
 Local command:
 
@@ -234,64 +221,25 @@ Local command:
 streamlit run dashboard/app.py
 ```
 
-Deployment config:
-
-- `.streamlit/config.toml`
-
-## Future Production Version With Official Public Datasets
-
-The repository includes sample data so it runs locally and an optional public-data ingestion script for selected fields. A production version should fully replace remaining sample fallback values with official public datasets:
-
-- [U.S. Census ACS 5-year data](https://www.census.gov/data/developers/data-sets/acs-5year.html)
-- [CDC PLACES](https://www.cdc.gov/places/)
-- [HRSA Data Warehouse shortage areas](https://data.hrsa.gov/topics/health-workforce/shortage-areas)
-- [CMS Provider Data](https://data.cms.gov/provider-data/)
-- [County Health Rankings & Roadmaps](https://www.countyhealthrankings.org/health-data/methodology-and-sources/data-documentation)
-- [Maryland Open Data](https://opendata.maryland.gov/)
-
-Future upgrade plan: [docs/future_real_data_upgrade.md](docs/future_real_data_upgrade.md)
-
 ## Documentation
 
+- Data sources: [docs/data_sources.md](docs/data_sources.md)
 - Data dictionary: [docs/data_dictionary.md](docs/data_dictionary.md)
 - Data provenance: [docs/data_provenance.md](docs/data_provenance.md)
 - Methodology: [docs/methodology.md](docs/methodology.md)
 - Model card: [docs/model_card.md](docs/model_card.md)
-- Interview talking points: [docs/interview_talking_points.md](docs/interview_talking_points.md)
-- Portfolio checklist: [docs/portfolio_checklist.md](docs/portfolio_checklist.md)
+- Validation report: [docs/validation_report.md](docs/validation_report.md)
 - Data quality report: [reports/data_quality_report.md](reports/data_quality_report.md)
 - Executive summary: [reports/executive_summary.md](reports/executive_summary.md)
 - Portfolio case study: [reports/portfolio_case_study.md](reports/portfolio_case_study.md)
-
-## Project Structure
-
-```text
-.
-├── .github/workflows/project_checks.yml
-├── .streamlit/config.toml
-├── Makefile
-├── dashboard/app.py
-├── data/raw/
-├── data/processed/
-├── docs/
-├── reports/
-├── sql/
-├── src/
-│   ├── public_data_ingestion.py
-│   └── data_pipeline.py
-├── tests/
-├── pytest.ini
-├── README.md
-├── requirements.txt
-└── resume_bullets.md
-```
+- Interview talking points: [docs/interview_talking_points.md](docs/interview_talking_points.md)
+- Portfolio checklist: [docs/portfolio_checklist.md](docs/portfolio_checklist.md)
 
 ## Makefile Commands
 
 ```bash
 make setup
-make live-data
-make live-pipeline
+make fetch-data
 make data
 make validate
 make model
@@ -301,13 +249,9 @@ make test
 make all
 ```
 
-## Modeling Caveat
-
-The current model uses a small demonstration dataset by default. Even when the default target is not derived from the access risk score, the data values are still sample values unless the optional live-data path is completed and reviewed. Perfect or near-perfect metrics can occur because this is a small county-level demonstration dataset. These results should not be interpreted as validated predictive performance. Metrics are useful for workflow validation, not operational predictive performance. A production model should be trained and validated against an external observed outcome such as preventable hospitalizations, avoidable emergency department visits, ambulatory care sensitive admissions, appointment wait times, or unmet care due to cost.
-
 ## Repository Rename Note
 
-The current GitHub remote is still `bnjmnprto/community-health-access-analytics`. After this upgrade branch is reviewed and approved, rename the GitHub repository to `maryland-healthcare-access-analytics` and update badges, deployment links, and any portfolio URLs. Do not rename the remote before review.
+The current GitHub remote is still `bnjmnprto/community-health-access-analytics`. After this branch is reviewed and approved, rename the GitHub repository to `maryland-healthcare-access-analytics` and update badges, deployment links, and portfolio URLs. Do not rename the remote before review.
 
 ## GitHub Repository Description
 
@@ -319,6 +263,6 @@ Suggested GitHub topics:
 
 ## Resume Bullet
 
-Built Maryland Healthcare Access Analytics, a public-health analytics portfolio project using Python, SQL, SQLite, scikit-learn, and Streamlit; engineered county-level risk indicators, added optional public-data ingestion with sample fallback, trained demonstration ML models, wrote SQL analysis queries, and documented responsible-use limitations for public-health planning.
+Built Maryland Healthcare Access Analytics, a public-health analytics project using Python, SQL, SQLite, scikit-learn, and Streamlit; integrated ACS, CDC PLACES, HRSA, and CMS county-level public data with documented fallback handling, engineered transparent access-risk indicators, trained a reproducible ML workflow with target caveats, wrote SQL analysis queries, and built an employer-facing dashboard with validation, CI, and responsible-use documentation.
 
 More role-specific bullets: [resume_bullets.md](resume_bullets.md)
